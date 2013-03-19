@@ -3996,13 +3996,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
 
+   
+    
     /** {@inheritDoc} */
     @Override
     public int interceptMotionBeforeQueueingWhenScreenOff(int policyFlags) {
         int result = 0;
-
-        final boolean isWakeMotion = (policyFlags
-                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0;
+        boolean lTrackballWakeScreen = true;
+        final int policyflag = (policyFlags
+                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED));
+        final boolean isWakeMotion = ((policyflag != 0) && (policyflag != 3))
+        // mouse events will produce a 1 (WAKE) or 2 (WAKE_DROPPED) but never 3,
+        // so we can assign 3 as a special value for the trackball motion events
+        // in InputReader.cpp so we can AND it with a toggle setting
+        // This is really wrong but seems to work without effecting external
+        // devices ability to wake the device.
+            || ((policyflag == 3) && lTrackballWakeScreen);
         if (isWakeMotion) {
             if (mKeyguardMediator != null && mKeyguardMediator.isShowing()) {
                 // If the keyguard is showing, let it decide what to do with the wake motion.
