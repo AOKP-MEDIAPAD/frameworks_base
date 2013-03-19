@@ -2486,9 +2486,19 @@ void CursorInputMapper::sync(nsecs_t when) {
     // the device in your pocket.
     // TODO: Use the input device configuration to control this behavior more finely.
     uint32_t policyFlags = 0;
-    if ((buttonsPressed || moved || scrolled)) {
+    if ((buttonsPressed || moved || scrolled) && getDevice()->isExternal()) {
         policyFlags |= POLICY_FLAG_WAKE_DROPPED;
     }
+    
+#ifdef LEGACY_TRACKPAD
+    // Hack to allow legacy trackpads to wake the device (and provide a toggle)
+    // all input events are either WAKE (1) or WAKE_DROPPED (2) but not both. in this
+    // special case we OR both flags together to produce an (3) which
+    // no input event will ever have besides this one (because its just wrong)
+    if (buttonsPressed && !getDevice()->isExternal()) {
+        policyFlags |= (POLICY_FLAG_WAKE | POLICY_FLAG_WAKE_DROPPED);
+    }
+#endif
 
     // Synthesize key down from buttons if needed.
     synthesizeButtonKeys(getContext(), AKEY_EVENT_ACTION_DOWN, when, getDeviceId(), mSource,
