@@ -5334,6 +5334,7 @@ void TouchInputMapper::dispatchPointerStylus(nsecs_t when, uint32_t policyFlags)
         mPointerSimple.currentProperties.id = 0;
         mPointerSimple.currentProperties.toolType =
                 mCurrentCookedPointerData.pointerProperties[index].toolType;
+        mLastStylusTime = when;
     } else {
         down = false;
         hovering = false;
