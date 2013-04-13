@@ -402,7 +402,9 @@ public class PhoneStatusBar extends BaseStatusBar {
         mStatusBarView = (PhoneStatusBarView) mStatusBarWindow.findViewById(R.id.status_bar);
         mStatusBarView.setStatusBar(this);
         mStatusBarView.setBar(this);
-        
+
+        mBarView = (ViewGroup) mStatusBarView;
+
 
         PanelHolder holder = (PanelHolder) mStatusBarWindow.findViewById(R.id.panel_holder);
         mStatusBarView.setPanelHolder(holder);
