@@ -3965,8 +3965,6 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                     newIntent.putExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, scoAudioState);
                     sendStickyBroadcastToAll(newIntent);
                 }
-                Log.d(TAG, "Adjust volume after BT");
-                adjustCurrentStreamVolume();
             } else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
                 mBootCompleted = true;
                 sendMsg(mAudioHandler, MSG_LOAD_SOUND_EFFECTS, SENDMSG_NOOP,
