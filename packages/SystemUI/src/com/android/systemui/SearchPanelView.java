@@ -146,7 +146,6 @@ public class SearchPanelView extends FrameLayout implements
 
         mContentResolver = mContext.getContentResolver();
         mSettingsObserver = new SettingsObserver(new Handler());
-        updateSettings();
     }
 
     @Override
@@ -158,7 +157,7 @@ public class SearchPanelView extends FrameLayout implements
 
     @Override
     protected void onDetachedFromWindow() {
-        mContentResolver.unregisterContentObserver(mSettingsObserver);
+        mSettingsObserver.unobserve();
         super.onDetachedFromWindow();
     }
 
@@ -297,9 +296,6 @@ public class SearchPanelView extends FrameLayout implements
         // TODO: fetch views
         mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
         mGlowPadView.setOnTriggerListener(mGlowPadViewListener);
-
-        updateSettings();
-        setDrawables();
     }
 
     private void maybeSkipKeyguard() {
@@ -609,7 +605,10 @@ public class SearchPanelView extends FrameLayout implements
                 resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.SYSTEMUI_NAVRING_ICON[i]), false, this);
             }
+        }
 
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
         }
 
         @Override
