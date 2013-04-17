@@ -1149,8 +1149,10 @@ class MountService extends IMountService.Stub
         mVolumeStates.clear();
 
         Resources resources = mContext.getResources();
-
-        int id = com.android.internal.R.xml.storage_list;
+		
+        int id = (SystemProperties.get("persist.extinternal","0").equals("1")) ? 
+				com.android.internal.R.xml.storage_list : com.android.internal.R.xml.storage_list_ext;
+		
         XmlResourceParser parser = resources.getXml(id);
         AttributeSet attrs = Xml.asAttributeSet(parser);
 
