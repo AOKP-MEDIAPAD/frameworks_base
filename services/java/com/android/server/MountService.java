@@ -1151,7 +1151,7 @@ class MountService extends IMountService.Stub
         Resources resources = mContext.getResources();
 		
         int id = (SystemProperties.get("persist.extinternal","0").equals("1")) ? 
-				com.android.internal.R.xml.storage_list : com.android.internal.R.xml.storage_list_ext;
+				com.android.internal.R.xml.storage_list_ext : com.android.internal.R.xml.storage_list;
 		
         XmlResourceParser parser = resources.getXml(id);
         AttributeSet attrs = Xml.asAttributeSet(parser);
