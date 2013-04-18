@@ -2410,6 +2410,12 @@ public final class Settings {
          */
         public static final String UI_FORCE_OVERFLOW_BUTTON = "ui_force_overflow_button";
 
+ 		/**
+         * Status Bar notification icon opacity
+         * @hide
+         */
+        public static final String STATUS_BAR_NOTIF_ICON_OPACITY = "status_bar_notif_icon_opacity";
+
         /**
          * AM/PM Style for clock options
          * 0 - Normal AM/PM
