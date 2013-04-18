@@ -3394,12 +3394,7 @@ public final class Settings {
          */
         public static final String MISSED_CALL_BREATH = "missed_call_breath";
 
-        /**  
-         * Give MMS Notifications a breathing effect
-         * @hide
-         */
-        public static final String MISSED_CALL_BREATH = "missed_call_breath";
-
+       
         /**
          * Allows to show the background activity back the lockscreen
          * @hide
