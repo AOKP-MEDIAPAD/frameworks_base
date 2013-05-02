@@ -1013,7 +1013,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                     | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                     PixelFormat.TRANSLUCENT);
         // this will allow the navbar to run in an overlay on devices that support this
@@ -1036,7 +1036,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                     | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
         lp.gravity = Gravity.TOP | Gravity.FILL_HORIZONTAL;
