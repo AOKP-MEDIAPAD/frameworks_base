@@ -105,6 +105,7 @@ import com.android.systemui.statusbar.policy.OnSizeChangedListener;
 import com.android.systemui.statusbar.policy.Prefs;
 import com.android.systemui.statusbar.toggles.ToggleManager;
 import com.android.systemui.aokp.AwesomeAction;
+import com.android.internal.util.aokp.AokpRibbonHelper;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -184,6 +185,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     // viewgroup containing the normal contents of the statusbar
     LinearLayout mStatusBarContents;
+
+    LinearLayout mRibbonNotif;
+    LinearLayout mRibbonQS;
     
     // right-hand icons
     LinearLayout mSystemIconArea;
@@ -673,6 +677,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         resetUserSetupObserver();
 
         mTransparencyManager.setStatusbar(mStatusBarView);
+        updateRibbonTargets();
         return mStatusBarView;
     }
 
@@ -688,15 +693,21 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     @Override
     protected WindowManager.LayoutParams getRecentsLayoutParams(LayoutParams layoutParams) {
+        boolean opaque = false;
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
                 layoutParams.width,
                 layoutParams.height,
                 WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
-                | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                PixelFormat.TRANSLUCENT);
+                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                (opaque ? PixelFormat.OPAQUE : PixelFormat.TRANSLUCENT));
+        if (ActivityManager.isHighEndGfx()) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        } else {
+            lp.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            lp.dimAmount = 0.75f;
+        }
         lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
         lp.setTitle("RecentsPanel");
         lp.windowAnimations = com.android.internal.R.style.Animation_RecentApplications;
@@ -707,15 +718,18 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     @Override
     protected WindowManager.LayoutParams getSearchLayoutParams(LayoutParams layoutParams) {
+        boolean opaque = false;
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_NAVIGATION_BAR_PANEL,
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
-                | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                PixelFormat.TRANSLUCENT);
+                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                (opaque ? PixelFormat.OPAQUE : PixelFormat.TRANSLUCENT));
+        if (ActivityManager.isHighEndGfx()) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        }
         lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
         lp.setTitle("SearchPanel");
         // TODO: Define custom animation for Search panel
@@ -999,9 +1013,14 @@ public class PhoneStatusBar extends BaseStatusBar {
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
                     | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                PixelFormat.TRANSLUCENT);
+                    PixelFormat.TRANSLUCENT);
+        // this will allow the navbar to run in an overlay on devices that support this
+        if (ActivityManager.isHighEndGfx()) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        }
+
         lp.setTitle("NavigationBar");
         lp.windowAnimations = 0;
         return lp;
@@ -1017,7 +1036,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
                     | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
         lp.gravity = Gravity.TOP | Gravity.FILL_HORIZONTAL;
@@ -1682,6 +1701,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 updateCarrierLabelVisibility(false);
             }
         }, FLIP_DURATION - 150);
+        updateRibbon(false);
     }
 
     @Override
@@ -1706,6 +1726,80 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (false) postStartTracing();
     }
 
+
+    public void updateRibbonTargets() {
+            ContentResolver cr = mContext.getContentResolver();
+            mRibbonNotif = (LinearLayout) mNotificationPanel.findViewById(R.id.ribbon_notif);
+            if (!mHasFlipSettings) {
+                if (mSettingsPanel != null) {
+                    mRibbonQS = (LinearLayout) mSettingsPanel.findViewById(R.id.ribbon_settings);
+                }
+            } else {
+                mRibbonQS = (LinearLayout) mNotificationPanel.findViewById(R.id.ribbon_qs);
+            }
+            if (mRibbonQS != null) {
+                mRibbonQS.removeAllViews();
+                mRibbonQS.addView(AokpRibbonHelper.getRibbon(mContext,
+                    Settings.System.getArrayList(cr,
+                         Settings.System.RIBBON_TARGETS_SHORT[AokpRibbonHelper.QUICK_SETTINGS]),
+                    Settings.System.getArrayList(cr,
+                         Settings.System.RIBBON_TARGETS_LONG[AokpRibbonHelper.QUICK_SETTINGS]),
+                    Settings.System.getArrayList(cr,
+                         Settings.System.RIBBON_TARGETS_ICONS[AokpRibbonHelper.QUICK_SETTINGS]),
+                    Settings.System.getBoolean(cr,
+                         Settings.System.ENABLE_RIBBON_TEXT[AokpRibbonHelper.QUICK_SETTINGS], true),
+                    Settings.System.getInt(cr,
+                         Settings.System.RIBBON_TEXT_COLOR[AokpRibbonHelper.QUICK_SETTINGS], -1),
+                    Settings.System.getInt(cr,
+                         Settings.System.RIBBON_ICON_SIZE[AokpRibbonHelper.QUICK_SETTINGS], 0),
+                    Settings.System.getInt(cr,
+                         Settings.System.RIBBON_ICON_SPACE[AokpRibbonHelper.QUICK_SETTINGS], 5),
+                    Settings.System.getBoolean(cr,
+                         Settings.System.RIBBON_ICON_VIBRATE[AokpRibbonHelper.QUICK_SETTINGS], true),
+                    Settings.System.getBoolean(cr,
+                         Settings.System.RIBBON_ICON_COLORIZE[AokpRibbonHelper.QUICK_SETTINGS], false)));
+            }
+            mRibbonNotif.removeAllViews();
+            mRibbonNotif.addView(AokpRibbonHelper.getRibbon(mContext,
+                Settings.System.getArrayList(cr,
+                     Settings.System.RIBBON_TARGETS_SHORT[AokpRibbonHelper.NOTIFICATIONS]),
+                Settings.System.getArrayList(cr,
+                     Settings.System.RIBBON_TARGETS_LONG[AokpRibbonHelper.NOTIFICATIONS]),
+                Settings.System.getArrayList(cr,
+                     Settings.System.RIBBON_TARGETS_ICONS[AokpRibbonHelper.NOTIFICATIONS]),
+                Settings.System.getBoolean(cr,
+                     Settings.System.ENABLE_RIBBON_TEXT[AokpRibbonHelper.NOTIFICATIONS], true),
+                Settings.System.getInt(cr,
+                     Settings.System.RIBBON_TEXT_COLOR[AokpRibbonHelper.NOTIFICATIONS], -1),
+                Settings.System.getInt(cr,
+                     Settings.System.RIBBON_ICON_SIZE[AokpRibbonHelper.NOTIFICATIONS], 0),
+                Settings.System.getInt(cr,
+                     Settings.System.RIBBON_ICON_SPACE[AokpRibbonHelper.NOTIFICATIONS], 5),
+                Settings.System.getBoolean(cr,
+                     Settings.System.RIBBON_ICON_VIBRATE[AokpRibbonHelper.NOTIFICATIONS], true),
+                Settings.System.getBoolean(cr,
+                     Settings.System.RIBBON_ICON_COLORIZE[AokpRibbonHelper.NOTIFICATIONS], false)));
+    }
+
+    public void updateRibbon() {
+        if (mHasFlipSettings) {
+            boolean ribbonSettings = mNotificationButton.getVisibility() == View.VISIBLE;
+            updateRibbon(ribbonSettings);
+        }
+    }
+
+    public void updateRibbon(boolean settings) {
+        if (mHasFlipSettings) {
+            if (settings) {
+                mRibbonNotif.setVisibility(View.GONE);
+                mRibbonQS.setVisibility(View.VISIBLE);
+            } else {
+                mRibbonQS.setVisibility(View.GONE);
+                mRibbonNotif.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     public void switchToSettings() {
         // Settings are not available in setup
         if (!mUserSetup) return;
@@ -1718,6 +1812,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         mNotificationButton.setVisibility(View.VISIBLE);
         mNotificationButton.setAlpha(1f);
         mClearButton.setVisibility(View.GONE);
+        updateRibbon(true);
     }
 
     public void flipToSettings() {
@@ -1767,6 +1862,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 updateCarrierLabelVisibility(false);
             }
         }, FLIP_DURATION - 150);
+        updateRibbon(true);
     }
 
     public void flipPanels() {
@@ -2710,6 +2806,42 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.NAV_HIDE_ENABLE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAV_HIDE_TIMEOUT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TARGETS_SHORT[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TARGETS_LONG[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TARGETS_ICONS[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ENABLE_RIBBON_TEXT[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TEXT_COLOR[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_COLORIZE[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_SIZE[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_SPACE[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_VIBRATE[AokpRibbonHelper.NOTIFICATIONS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TARGETS_SHORT[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TARGETS_LONG[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TARGETS_ICONS[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ENABLE_RIBBON_TEXT[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_SIZE[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_SPACE[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_VIBRATE[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_ICON_COLORIZE[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIBBON_TEXT_COLOR[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
         }
 
          @Override
@@ -2751,6 +2883,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         } else if (mGesturePanel != null) {
             disableAutoHide();
         }
+        updateRibbonTargets();
     }
 
     public boolean skipToSettingsPanel() {
