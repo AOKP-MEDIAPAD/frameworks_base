@@ -46,8 +46,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.android.internal.util.aokp.BackgroundAlphaColorDrawable;
 import com.android.systemui.R;
-import com.android.systemui.statusbar.BackgroundAlphaColorDrawable;
 import com.android.systemui.statusbar.NavigationBarView;
 
 public class PhoneStatusBarView extends PanelBar {
@@ -177,6 +177,7 @@ public class PhoneStatusBarView extends PanelBar {
     public void onPanelPeeked() {
         super.onPanelPeeked();
         mBar.makeExpandedVisible(true);
+        mBar.updateRibbon();
     }
 
     @Override
