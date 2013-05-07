@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,10 +134,10 @@ public class BluetoothPbap {
      * are ok.
      */
     public synchronized void close() {
-        if (mConnection != null && mService != null) {
+        if (mConnection != null) {
             mContext.unbindService(mConnection);
+            mConnection = null;
         }
-        mConnection = null;
         mServiceListener = null;
     }
 
@@ -208,11 +207,7 @@ public class BluetoothPbap {
             try {
                 mService.disconnect();
                 return true;
-            } catch (RemoteException e) {Log.e(TAG, e.toString());
-            } catch (NullPointerException e) {
-                Log.w(TAG, "Pbap Service is already disconnected");
-            }
-
+            } catch (RemoteException e) {Log.e(TAG, e.toString());}
         } else {
             Log.w(TAG, "Proxy not attached to service");
             if (DBG) log(Log.getStackTraceString(new Throwable()));
