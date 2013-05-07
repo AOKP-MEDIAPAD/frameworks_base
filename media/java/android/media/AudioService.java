@@ -1894,7 +1894,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     /** @see AudioManager#setBluetoothA2dpOn() */
     public void setBluetoothA2dpOn(boolean on) {
-        if (!checkAudioSettingsPermission("setBluetoothA2dpOn()") && noDelayInATwoDP) {
+        if (noDelayInATwoDP && !checkAudioSettingsPermission("setBluetoothA2dpOn()")) {
             return;
         }
         synchronized (mBluetoothA2dpEnabledLock) {

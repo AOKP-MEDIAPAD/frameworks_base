@@ -405,7 +405,11 @@ public class PhoneStatusBar extends BaseStatusBar {
             }});
 
         mStatusBarView = (PhoneStatusBarView) mStatusBarWindow.findViewById(R.id.status_bar);
+        mStatusBarView.setStatusBar(this);
         mStatusBarView.setBar(this);
+
+        mBarView = (ViewGroup) mStatusBarView;
+
 
         PanelHolder holder = (PanelHolder) mStatusBarWindow.findViewById(R.id.panel_holder);
         mStatusBarView.setPanelHolder(holder);
@@ -680,6 +684,11 @@ public class PhoneStatusBar extends BaseStatusBar {
     @Override
     protected View getStatusBarView() {
         return mStatusBarView;
+    }
+
+    @Override
+    public QuickSettingsContainerView getQuickSettingsPanel() {
+        return mSettingsContainer;
     }
 
     @Override
@@ -1004,7 +1013,8 @@ public class PhoneStatusBar extends BaseStatusBar {
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                    | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                     PixelFormat.TRANSLUCENT);
         // this will allow the navbar to run in an overlay on devices that support this
         if (ActivityManager.isHighEndGfx()) {
@@ -1026,7 +1036,8 @@ public class PhoneStatusBar extends BaseStatusBar {
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                    | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
         lp.gravity = Gravity.TOP | Gravity.FILL_HORIZONTAL;
         //lp.y += height * 1.5; // FIXME
@@ -1587,6 +1598,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         mStatusBarWindow.cancelExpandHelper();
         mStatusBarView.collapseAllPanels(true);
+        super.animateCollapsePanels(flags);
     }
 
     public ViewPropertyAnimator setVisibilityWhenDone(
@@ -2172,6 +2184,8 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     public void topAppWindowChanged(boolean showMenu) {
         mTransparencyManager.update();
+        if (mPieControlPanel != null)
+            mPieControlPanel.setMenu(showMenu);
         if (DEBUG) {
             Slog.d(TAG, (showMenu?"showing":"hiding") + " the MENU button");
         }
