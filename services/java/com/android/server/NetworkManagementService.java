@@ -851,6 +851,8 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         } catch (NativeDaemonConnectorException e) {
             throw new IllegalStateException("Unable to communicate to native daemon");
         }
+        BluetoothTetheringDataTracker.getInstance().startReverseTether(iface);
+
     }
 
     // TODO(BT) Remove
@@ -861,6 +863,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         } catch (NativeDaemonConnectorException e) {
             throw new IllegalStateException("Unable to communicate to native daemon to stop tether");
         }
+        BluetoothTetheringDataTracker.getInstance().stopReverseTether();
     }
 
     @Override

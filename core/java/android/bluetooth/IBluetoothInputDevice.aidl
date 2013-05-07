@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ package android.bluetooth;
 import android.bluetooth.BluetoothDevice;
 
 /**
- * APIs for Bluetooth A2DP service
+ * API for Bluetooth HID service
  *
- * @hide
+ * {@hide}
  */
-interface IBluetoothA2dp {
+interface IBluetoothInputDevice {
     // Public API
     boolean connect(in BluetoothDevice device);
     boolean disconnect(in BluetoothDevice device);
@@ -32,5 +32,28 @@ interface IBluetoothA2dp {
     int getConnectionState(in BluetoothDevice device);
     boolean setPriority(in BluetoothDevice device, int priority);
     int getPriority(in BluetoothDevice device);
-    boolean isA2dpPlaying(in BluetoothDevice device);
+    /**
+    * @hide
+    */
+    boolean getProtocolMode(in BluetoothDevice device);
+    /**
+    * @hide
+    */
+    boolean virtualUnplug(in BluetoothDevice device);
+    /**
+    * @hide
+    */
+    boolean setProtocolMode(in BluetoothDevice device, int protocolMode);
+    /**
+    * @hide
+    */
+    boolean getReport(in BluetoothDevice device, byte reportType, byte reportId, int bufferSize);
+    /**
+    * @hide
+    */
+    boolean setReport(in BluetoothDevice device, byte reportType, String report);
+    /**
+    * @hide
+    */
+    boolean sendData(in BluetoothDevice device, String report);
 }
