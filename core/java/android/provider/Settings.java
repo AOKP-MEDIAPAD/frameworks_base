@@ -3454,7 +3454,41 @@ public final class Settings {
          *
          * @hide
          */
+        public static final String[] SWIPE_RIBBON_TOGGLES = new String[] {
+            "swipe_ribbon_toggles_left",
+            "swipe_ribbon_toggles_right",
+            "swipe_ribbon_toggles_bottom",
+        };
+
+        /**
+         *
+         * @hide
+         */
         public static final String RIBBON_DRAG_HANDLE_WEIGHT = "ribbon_drag_handle_weight";
+
+        /**
+         *
+         * @hide
+         */
+        public static final String APP_WINDOW_COLOR_BG = "app_window_color_bg";
+
+        /**
+         *
+         * @hide
+         */
+        public static final String APP_WINDOW_COLUMNS = "app_window_columns";
+
+        /**
+         *
+         * @hide
+         */
+        public static final String APP_WINDOW_COLOR_TEXT = "app_window_color_text";
+
+        /**
+         *
+         * @hide
+         */
+        public static final String APP_WINDOW_OPACITY = "app_window_opacity";
 
         /**
          *
@@ -3540,12 +3574,12 @@ public final class Settings {
         /**
          * @hide
          */
-        public static final String CUSTOM_TOGGLE_ADVANCED = "custom_toggle_advanced";
+        public static final String CUSTOM_TOGGLE_REVERT = "custom_toggle_revert";
 
         /**
          * @hide
          */
-        public static final String CUSTOM_TOGGLE_REVERT = "custom_toggle_revert";
+        public static final String CUSTOM_TOGGLE_STATE = "custom_toggle_state";
 
         /**
          * @hide

@@ -4076,6 +4076,9 @@
     <!-- In WiFi notification -->
     <string name="notify_turn_wifi_off_title">Turn Wi-Fi off</string>
 
+    <!-- In WiFi AP notification -->
+    <string name="notify_turn_wifi_ap_off_title">Turn Wi-Fi AP off</string>
+
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Display rotation unlocked</string>
     <string name="toast_rotation_locked">Display rotation locked</string>
@@ -4107,6 +4110,7 @@
     <string name="action_camera">Camera</string>
     <string name="action_null">Blank</string>
     <string name="action_widgets">Nav Widgets</string>
+    <string name="action_app_window">App Window</string>
     <string name="action_ribbon">AOKP Ribbon</string>
     <string name="action_app">Custom App/Shortcut</string>
 </resources>
