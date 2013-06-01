@@ -362,14 +362,15 @@ public class StatusBarIconView extends AnimatedImageView {
 
         @Override
         public void onChange(boolean selfChange) {
-            setAlpha(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.STATUS_BAR_NOTIF_ICON_OPACITY, 140));
+            int alpha = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.STATUS_BAR_NOTIF_ICON_OPACITY, 140);
 
             boolean showIconCount = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.STATUSBAR_NOTIF_COUNT, 0) == 1;
             for (StatusBarIconView sbiv : mIconViews) {
                 sbiv.mShowNotificationCount = showIconCount;
                 sbiv.set(sbiv.mIcon, true);
+                sbiv.setAlpha(alpha);
             }
         }
     }
