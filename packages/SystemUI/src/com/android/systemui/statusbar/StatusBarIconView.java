@@ -88,11 +88,6 @@ public class StatusBarIconView extends AnimatedImageView {
         setScaleX(scale);
         setScaleY(scale);
         if (notification != null) {
-            final int outerBounds = res.getDimensionPixelSize(R.dimen.status_bar_icon_size);
-            final int imageBounds = res.getDimensionPixelSize(R.dimen.status_bar_icon_drawing_size);
-            final float scale = (float)imageBounds / (float)outerBounds;
-            setScaleX(scale);
-            setScaleY(scale);
             setAlpha(Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.STATUS_BAR_NOTIF_ICON_OPACITY, 140));
         }
