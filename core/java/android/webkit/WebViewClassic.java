@@ -5386,7 +5386,7 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
         ClipData clipData = cm.getPrimaryClip();
         if (clipData != null) {
             ClipData.Item clipItem = clipData.getItemAt(0);
-            CharSequence pasteText = clipItem.getText();
+            CharSequence pasteText = clipItem.coerceToText(mContext);
             if (mInputConnection != null) {
                 mInputConnection.replaceSelection(pasteText);
             }
@@ -8370,8 +8370,10 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
             mListBoxDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
+                 if (mWebViewCore != null) {
                     mWebViewCore.sendMessage(
                                 EventHub.SINGLE_LISTBOX_CHOICE, -2, 0);
+                    }
                     mListBoxDialog = null;
                 }
             });

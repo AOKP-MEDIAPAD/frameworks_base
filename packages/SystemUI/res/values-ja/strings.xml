@@ -132,6 +132,8 @@
     <string name="accessibility_data_connection_hspa" msgid="2032328855462645198">"HSPA"</string>
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"ローミング中"</string>
@@ -222,11 +224,19 @@
     <string name="quick_settings_reboot_message">端末再起動中</string>
     <string name="quick_settings_stayawake_on">常時画面点灯 On</string>
     <string name="quick_settings_stayawake_off">常時画面点灯 Off</string>
+    <string name="quick_settings_adb_on"><xliff:g id="ip" example="192.168.1.5">%s</xliff:g></string>
+    <string name="quick_settings_adb_off">ワイヤレスADB Off</string>
 
     <string name="status_bar_help_title" msgid="1199237744086469217">"ここに通知が表示されます"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"下にスワイプすると、いつでも通知を表示できます。"\n"システムを管理するにはもう一度下にスワイプしてください。"</string>
 
     <!--  AOKP Strings can go here... -->
+
+    <!--  App window Strings -->
+    <string name="close">閉じる</string>
+    <string name="app_window">アプリ</string>
+    <string name="toggles">トグル</string>
+    <string name="ribbon">リボン</string>
 
     <!--  Target/Action Strings -->
     <string name="shortcut_label">AOKPアクション</string>
