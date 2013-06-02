@@ -149,15 +149,32 @@ public class WidgetView extends LinearLayout {
         float px = dp * getResources().getDisplayMetrics().density;
         mWidgetPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,(int) px));
 
+        int widgetBGColor = Settings.System.getInt(
+                                mContext.getContentResolver(),
+                                Settings.System.NAVIGATION_BAR_WIDGETS_BG_COLOR,
+                                -2);
+        int widgetTextColor = Settings.System.getInt(
+                                mContext.getContentResolver(),
+                                Settings.System.NAVIGATION_BAR_WIDGETS_TEXT_COLOR,
+                                -2);
         float widgetAlpha = Settings.System.getFloat(
                                 mContext.getContentResolver(),
                                 Settings.System.NAVIGATION_BAR_WIDGETS_ALPHA,
                                 0.25f);
 
+        if (mWidgetLabel != null) {
+            mWidgetLabel.setText(mAdapter.getLabel(mWidgetPager.getCurrentItem()));
+            if (widgetTextColor != -2) {
+                mWidgetLabel.setTextColor(widgetTextColor);
+            }
+        }
+
         if (mWidgetPanel != null) {
             Drawable background = mWidgetPanel.getBackground();
             background.setColorFilter(null);
-            background.setColorFilter(0, Mode.SRC_ATOP);
+            if (widgetBGColor != -2) {
+                background.setColorFilter(widgetBGColor, Mode.SRC_ATOP);
+            }
             background.setAlpha((int) ((1-widgetAlpha) * 255));
         }
 
@@ -253,6 +270,14 @@ public class WidgetView extends LinearLayout {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(
                 Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS),
+                false,
+                this);
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS_BG_COLOR),
+                false,
+                this);
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS_TEXT_COLOR),
                 false,
                 this);
             resolver.registerContentObserver(

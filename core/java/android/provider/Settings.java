@@ -3793,7 +3793,18 @@ public final class Settings {
             "custom_toggle_icons_3",
             "custom_toggle_icons_4",
         };
-        
+        /**
+         * Widgets background color
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDGETS_BG_COLOR = "navigation_bar_widgets_bg_color";
+
+        /**
+         * Widgets text color
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDGETS_TEXT_COLOR = "navigation_bar_widgets_text_color";
+
         /**
          * Widgets background transparency
          * @hide
