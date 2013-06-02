@@ -3793,6 +3793,12 @@ public final class Settings {
             "custom_toggle_icons_3",
             "custom_toggle_icons_4",
         };
+        
+        /**
+         * Widgets background transparency
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDGETS_ALPHA = "navigation_bar_widgets_alpha";
 
         /**
          * @hide

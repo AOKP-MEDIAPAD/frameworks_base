@@ -12,6 +12,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
+import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.provider.Settings;
@@ -38,6 +40,7 @@ public class WidgetView extends LinearLayout {
     public FrameLayout mPopupView;
     public WindowManager mWindowManager;
     int originalHeight = 0;
+    LinearLayout mWidgetPanel;
     TextView mWidgetLabel;
     ViewPager mWidgetPager;
     View widgetView;
@@ -135,6 +138,8 @@ public class WidgetView extends LinearLayout {
         mPopupView = new FrameLayout(mContext);
         widgetView = View.inflate(mContext, R.layout.navigation_bar_expanded, null);
         mPopupView.addView(widgetView);
+
+        mWidgetPanel = (LinearLayout) widgetView.findViewById(R.id.widget);
         mWidgetLabel = (TextView) mPopupView.findViewById(R.id.widgetlabel);
         mWidgetPager = (ViewPager) widgetView.findViewById(R.id.pager);
         mWidgetPager.setAdapter(mAdapter = new WidgetPagerAdapter(mContext, widgetIds));
@@ -143,6 +148,20 @@ public class WidgetView extends LinearLayout {
         int dp = mAdapter.getHeight(mWidgetPager.getCurrentItem());
         float px = dp * getResources().getDisplayMetrics().density;
         mWidgetPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,(int) px));
+
+        float widgetAlpha = Settings.System.getFloat(
+                                mContext.getContentResolver(),
+                                Settings.System.NAVIGATION_BAR_WIDGETS_ALPHA,
+                                0.25f);
+
+        if (mWidgetPanel != null) {
+            Drawable background = mWidgetPanel.getBackground();
+            background.setColorFilter(null);
+            if (widgetBGColor != -2) {
+                background.setColorFilter(widgetBGColor, Mode.SRC_ATOP);
+            }
+            background.setAlpha((int) ((1-widgetAlpha) * 255));
+        }
 
         mPopupView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -238,6 +257,10 @@ public class WidgetView extends LinearLayout {
                 Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS),
                 false,
                 this);
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS_ALPHA),
+                false,
+                this);    
             updateSettings();
         }
 
