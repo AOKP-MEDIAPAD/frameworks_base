@@ -157,9 +157,7 @@ public class WidgetView extends LinearLayout {
         if (mWidgetPanel != null) {
             Drawable background = mWidgetPanel.getBackground();
             background.setColorFilter(null);
-            if (widgetBGColor != -2) {
-                background.setColorFilter(widgetBGColor, Mode.SRC_ATOP);
-            }
+            background.setColorFilter(0, Mode.SRC_ATOP);
             background.setAlpha((int) ((1-widgetAlpha) * 255));
         }
 
