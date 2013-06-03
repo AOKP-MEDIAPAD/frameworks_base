@@ -1011,6 +1011,20 @@ public final class Settings {
         }
 
         /**
+         * Look up a name in the database.
+         * @param resolver to access the database with
+         * @param name to look up in the table
+         * @param defaultValue returned if value is null
+         * @return the corresponding value, or default if not present
+         */
+        public synchronized static String getString(ContentResolver resolver,
+                String name, String defaultValue) {
+
+            String value = getString(resolver, name);
+            return value == null ? defaultValue: value;
+        }
+
+        /**
          * Store a name/value pair into the database.
          * @param resolver to access the database with
          * @param name to store
@@ -1841,6 +1855,17 @@ public final class Settings {
          */
         public static final String AUTO_BRIGHTNESS_BACKLIGHT = "auto_brightness_backlight";
 
+        /**
+         * Correction factor for auto-brightness adjustment light sensor
+         * debounce times.
+         * Smaller factors will make the adjustment more responsive, but might
+         * cause flicker and/or cause higher CPU usage.
+         * Valid range is 0.2 ... 3
+         *
+         * @hide
+         */
+        public static final String AUTO_BRIGHTNESS_RESPONSIVENESS = "auto_brightness_responsiveness";
+
          /**
           * Determines which streams are affected by mute. The
           * stream type's bit should be set to 1 if it should be muted when a mute request
@@ -2482,6 +2507,12 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_CLOCK_WEEKDAY = "statusbar_clock_weekday";
+
+        /**
+         * This should be an Int representing the Font Size in SP.
+         * @hide
+        */
+        public static final String STATUSBAR_FONT_SIZE = "statusbar_font_size";
 
         /**
          * Show the pending notification counts as overlays on the statusbar
@@ -3236,6 +3267,12 @@ public final class Settings {
         };
 
         /**
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_GLOW_TORCH = "lockscreen_glow_torch";
+
+        /**
          * Whether to use the custom quick unlock screen control
          * @hide
          */
@@ -3770,6 +3807,23 @@ public final class Settings {
             "custom_toggle_icons_3",
             "custom_toggle_icons_4",
         };
+        /**
+         * Widgets background color
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDGETS_BG_COLOR = "navigation_bar_widgets_bg_color";
+
+        /**
+         * Widgets text color
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDGETS_TEXT_COLOR = "navigation_bar_widgets_text_color";
+
+        /**
+         * Widgets background transparency
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDGETS_ALPHA = "navigation_bar_widgets_alpha";
 
         /**
          * @hide
@@ -3794,6 +3848,29 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
+
+        /**
+         * Battery warning preferences
+         *
+         * 0 = show dialog + play sound (default)
+         * 1 = fire notification + play sound
+         * 2 = show dialog only
+         * 3 = fire notification only
+         * 4 = play sound only
+         * 5 = none
+         * @hide
+         */
+        public static final String POWER_UI_LOW_BATTERY_WARNING_POLICY = "power_ui_low_battery_warning_policy";
+
+		/**
+         * Allows to disable Camera widget in locskcreen
+         * 0 = show camera default
+         * 1 = hide camera
+         * @hide
+         */
+        public static final String CAMERA_WIDGET_HIDE = "camera_widget_hide";
+
+        public static final String THEME_WALLPAPER = "theme_wallpaper";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -4724,30 +4801,6 @@ public final class Settings {
         public static final String BLUETOOTH_ON = Global.BLUETOOTH_ON;
 
         /**
-         * Get the key that retrieves a bluetooth headset's priority.
-         * @hide
-         */
-        public static final String getBluetoothHeadsetPriorityKey(String address) {
-            return ("bluetooth_headset_priority_" + address.toUpperCase());
-        }
-
-        /**
-         * Get the key that retrieves a bluetooth a2dp sink's priority.
-         * @hide
-         */
-        public static final String getBluetoothA2dpSinkPriorityKey(String address) {
-            return ("bluetooth_a2dp_sink_priority_" + address.toUpperCase());
-        }
-
-        /**
-         * Get the key that retrieves a bluetooth Input Device's priority.
-         * @hide
-         */
-        public static final String getBluetoothInputDevicePriorityKey(String address) {
-            return ("bluetooth_input_device_priority_" + address.toUpperCase());
-        }
-
-        /**
          * @deprecated Use {@link android.provider.Settings.Global#DATA_ROAMING} instead
          */
         @Deprecated
@@ -5671,13 +5724,6 @@ public final class Settings {
         public static final String UI_INVERTED_MODE = "ui_inverted_mode";
 
         /**
-         * force UI mode change for methods which are not observing
-         * UiModeManagerService
-         * @hide
-         */
-        public static final String UI_MODE_IS_TOGGLED = "ui_mode_is_toggled";
-
-        /**
          * Whether screensavers are enabled.
          * @hide
          */
@@ -5762,7 +5808,6 @@ public final class Settings {
             MOUNT_UMS_NOTIFY_ENABLED,
             UI_NIGHT_MODE,
             UI_INVERTED_MODE,
-            UI_MODE_IS_TOGGLED,
             LOCK_SCREEN_OWNER_INFO,
             LOCK_SCREEN_OWNER_INFO_ENABLED
         };

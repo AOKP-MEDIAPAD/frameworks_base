@@ -246,7 +246,6 @@
   <java-symbol type="bool" name="action_bar_embed_tabs_pre_jb" />
   <java-symbol type="bool" name="action_bar_expanded_action_views_exclusive" />
   <java-symbol type="bool" name="config_allowActionMenuItemTextWithIcon" />
-  <java-symbol type="bool" name="config_bluetooth_adapter_quick_switch" />
   <java-symbol type="bool" name="config_bluetooth_address_validation" />
   <java-symbol type="bool" name="config_bluetooth_sco_off_call" />
   <java-symbol type="bool" name="config_cellBroadcastAppLinks" />
@@ -1255,6 +1254,7 @@
   <java-symbol type="dimen" name="navigation_bar_height_landscape" />
   <java-symbol type="dimen" name="navigation_bar_width" />
   <java-symbol type="dimen" name="status_bar_height" />
+  <java-symbol type="dimen" name="status_bar_padding" />
   <java-symbol type="dimen" name="kg_widget_pager_horizontal_padding" />
   <java-symbol type="dimen" name="kg_widget_pager_top_padding" />
   <java-symbol type="dimen" name="kg_widget_pager_bottom_padding" />
@@ -1381,7 +1381,7 @@
   <java-symbol type="id" name="keyguard_selector_view_frame" />
   <java-symbol type="integer" name="config_carDockRotation" />
   <java-symbol type="integer" name="config_defaultUiModeType" />
-  <java-symbol type="integer" name="config_alternativeUiModeType" />
+  <java-symbol type="integer" name="config_uiInvertedMode" />
   <java-symbol type="integer" name="config_deskDockRotation" />
   <java-symbol type="integer" name="config_lidKeyboardAccessibility" />
   <java-symbol type="integer" name="config_lidNavigationAccessibility" />
@@ -1736,6 +1736,8 @@
   <java-symbol type="anim" name="push_up_out" />
   <java-symbol type="bool" name="config_alwaysUseCdmaRssi" />
   <java-symbol type="dimen" name="status_bar_icon_size" />
+  <java-symbol type="dimen" name="status_bar_icon_top_padding" />
+  <java-symbol type="dimen" name="status_bar_icon_bottom_padding" />
   <java-symbol type="dimen" name="system_bar_icon_size" />
   <java-symbol type="drawable" name="list_selector_pressed_holo_dark" />
   <java-symbol type="drawable" name="scrubber_control_disabled_holo" />

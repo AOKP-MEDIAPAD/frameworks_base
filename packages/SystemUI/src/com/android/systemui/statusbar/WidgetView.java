@@ -10,7 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.ContentObserver;
+import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.provider.Settings;
@@ -37,6 +40,7 @@ public class WidgetView extends LinearLayout {
     public FrameLayout mPopupView;
     public WindowManager mWindowManager;
     int originalHeight = 0;
+    LinearLayout mWidgetPanel;
     TextView mWidgetLabel;
     ViewPager mWidgetPager;
     View widgetView;
@@ -48,6 +52,7 @@ public class WidgetView extends LinearLayout {
     boolean mMoving = false;
     boolean showing = false;
     boolean animating = false;
+    int mCurrUiInvertedMode;
 
     final static String TAG = "Widget";
 
@@ -56,11 +61,15 @@ public class WidgetView extends LinearLayout {
 
         mContext = context;
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+
+        mCurrUiInvertedMode = mContext.getResources().getConfiguration().uiInvertedMode;
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(WidgetReceiver.ACTION_ALLOCATE_ID);
         filter.addAction(WidgetReceiver.ACTION_DEALLOCATE_ID);
         filter.addAction(WidgetReceiver.ACTION_TOGGLE_WIDGETS);
         filter.addAction(WidgetReceiver.ACTION_DELETE_WIDGETS);
+        filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         mContext.registerReceiver(new WidgetReceiver(), filter);
         mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
@@ -129,6 +138,8 @@ public class WidgetView extends LinearLayout {
         mPopupView = new FrameLayout(mContext);
         widgetView = View.inflate(mContext, R.layout.navigation_bar_expanded, null);
         mPopupView.addView(widgetView);
+
+        mWidgetPanel = (LinearLayout) widgetView.findViewById(R.id.widget);
         mWidgetLabel = (TextView) mPopupView.findViewById(R.id.widgetlabel);
         mWidgetPager = (ViewPager) widgetView.findViewById(R.id.pager);
         mWidgetPager.setAdapter(mAdapter = new WidgetPagerAdapter(mContext, widgetIds));
@@ -137,6 +148,35 @@ public class WidgetView extends LinearLayout {
         int dp = mAdapter.getHeight(mWidgetPager.getCurrentItem());
         float px = dp * getResources().getDisplayMetrics().density;
         mWidgetPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,(int) px));
+
+        int widgetBGColor = Settings.System.getInt(
+                                mContext.getContentResolver(),
+                                Settings.System.NAVIGATION_BAR_WIDGETS_BG_COLOR,
+                                -2);
+        int widgetTextColor = Settings.System.getInt(
+                                mContext.getContentResolver(),
+                                Settings.System.NAVIGATION_BAR_WIDGETS_TEXT_COLOR,
+                                -2);
+        float widgetAlpha = Settings.System.getFloat(
+                                mContext.getContentResolver(),
+                                Settings.System.NAVIGATION_BAR_WIDGETS_ALPHA,
+                                0.25f);
+
+        if (mWidgetLabel != null) {
+            mWidgetLabel.setText(mAdapter.getLabel(mWidgetPager.getCurrentItem()));
+            if (widgetTextColor != -2) {
+                mWidgetLabel.setTextColor(widgetTextColor);
+            }
+        }
+
+        if (mWidgetPanel != null) {
+            Drawable background = mWidgetPanel.getBackground();
+            background.setColorFilter(null);
+            if (widgetBGColor != -2) {
+                background.setColorFilter(widgetBGColor, Mode.SRC_ATOP);
+            }
+            background.setAlpha((int) ((1-widgetAlpha) * 255));
+        }
 
         mPopupView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -232,6 +272,18 @@ public class WidgetView extends LinearLayout {
                 Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS),
                 false,
                 this);
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS_BG_COLOR),
+                false,
+                this);
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS_TEXT_COLOR),
+                false,
+                this);
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_WIDGETS_ALPHA),
+                false,
+                this);    
             updateSettings();
         }
 
@@ -294,6 +346,14 @@ public class WidgetView extends LinearLayout {
                     mAdapter.mAppWidgetHost.deleteAppWidgetId(widgetIds[i]);
                 }
                 mAdapter.mAppWidgetHost.deleteHost();
+            } else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
+                // detect inverted ui mode change
+                int uiInvertedMode =
+                    mContext.getResources().getConfiguration().uiInvertedMode;
+                if (uiInvertedMode != mCurrUiInvertedMode) {
+                    mCurrUiInvertedMode = uiInvertedMode;
+                    createWidgetView();
+                }
             }
         }
     }

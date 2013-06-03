@@ -662,6 +662,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         };
     }
 
+    public void dismissKeyguard() {
+        Intent u = new Intent();
+        u.setAction("com.android.lockscreen.ACTION_UNLOCK_RECEIVER");
+        mContext.sendBroadcastAsUser(u, UserHandle.ALL);
+    }
+
     public void dismissPopups() {
         if (mNotificationBlamePopup != null) {
             mNotificationBlamePopup.dismiss();
@@ -1217,7 +1223,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         final StatusBarIconView iconView = new StatusBarIconView(mContext,
                 notification.pkg + "/0x" + Integer.toHexString(notification.id),
                 notification.notification);
-        iconView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         final StatusBarIcon ic = new StatusBarIcon(notification.pkg,
                     notification.user,
