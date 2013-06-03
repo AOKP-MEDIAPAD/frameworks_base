@@ -3848,6 +3848,14 @@ public final class Settings {
          */
         public static final String POWER_UI_LOW_BATTERY_WARNING_POLICY = "power_ui_low_battery_warning_policy";
 
+		/**
+         * Allows to disable Camera widget in locskcreen
+         * 0 = show camera default
+         * 1 = hide camera
+         * @hide
+         */
+        public static final String CAMERA_WIDGET_HIDE = "camera_widget_hide";
+        
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
