@@ -3046,7 +3046,7 @@ public final class Settings {
         public static final String PIE_LAST_APP = "pie_last_app";
 
         /**
-         * Pie gap angle, should default to 12
+         * Pie gap angle, should default to 2
          * @hide
          */
         public static final String PIE_GAP = "pie_gap";
@@ -3148,7 +3148,7 @@ public final class Settings {
         public static final String PIE_EXPANDED_DESKTOP_ONLY = "pie_expanded_desktop_only";
 
         /**
-         * Pie empty angle, should default to 0
+         * Pie empty angle, should default to 12
          * @hide
          */
         public static final String PIE_ANGLE = "pie_angle";
