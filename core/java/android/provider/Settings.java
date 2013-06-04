@@ -3899,6 +3899,12 @@ public final class Settings {
         public static final String THEME_WALLPAPER = "theme_wallpaper";
 
         /**
+         * Whether to dim the notification shade when pulling down the status bar
+         * @hide
+         */
+        public static final String NOTIFICATION_SHADE_DIM = "notification_shade_dim";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
