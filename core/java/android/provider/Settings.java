@@ -3845,6 +3845,8 @@ public final class Settings {
          */
         public static final String NAVIGATION_BAR_WIDGETS_TEXT_COLOR = "navigation_bar_widgets_text_color";
 
+        public static final String THEME_WALLPAPER = "theme_wallpaper";
+
         /**
          * Widgets background transparency
          * @hide
