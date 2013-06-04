@@ -2890,21 +2890,13 @@ public class PhoneStatusBar extends BaseStatusBar {
          @Override
         public void onChange(boolean selfChange) {
             updateSettings();
-            updateStatusBarVisibility();
             update();
         }
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            mNotificationShortcutsToggle = Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_SHORTCUTS_TOGGLE, 0, UserHandle.USER_CURRENT) != 0;
-            mNotificationShortcutsHideCarrier = Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_SHORTCUTS_HIDE_CARRIER, 0, UserHandle.USER_CURRENT) != 0;
-            mNotificationShadeDim = Settings.System.getInt(resolver,
+             mNotificationShadeDim = Settings.System.getInt(resolver,
                     Settings.System.NOTIFICATION_SHADE_DIM, ActivityManager.isHighEndGfx() ? 1 : 0) == 1;
-            if (mCarrierLabel != null) {
-                toggleCarrierAndWifiLabelVisibility();
-            }
         }
     }
 
