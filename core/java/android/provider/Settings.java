@@ -2554,6 +2554,14 @@ public final class Settings {
         public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
 
         /**
+         * @hide
+         * Show Wifi network name in notification shade
+         * 0 - don't show
+         * 1 - show
+         */
+        public static final String NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
+
+        /**
          * Sets the alpha of notification wallpaper
          * @hide
          */
@@ -3046,7 +3054,7 @@ public final class Settings {
         public static final String PIE_LAST_APP = "pie_last_app";
 
         /**
-         * Pie gap angle, should default to 3
+         * Pie gap angle, should default to 2
          * @hide
          */
         public static final String PIE_GAP = "pie_gap";
@@ -3070,7 +3078,7 @@ public final class Settings {
         public static final String PIE_MODE = "pie_mode";
 
         /**
-         * Pie size fraction
+         * Pie size fraction, default is 1.0f (normal)
          * @hide
          */
         public static final String PIE_SIZE = "pie_size";
@@ -3142,6 +3150,17 @@ public final class Settings {
          */
         public static final String PIE_CENTER = "pie_center";
 
+        /**
+         * @hide
+         */
+        public static final String PIE_EXPANDED_DESKTOP_ONLY = "pie_expanded_desktop_only";
+
+        /**
+         * Pie empty angle, should default to 12
+         * @hide
+         */
+        public static final String PIE_ANGLE = "pie_angle";
+
          /**
          * Expanded desktop on/off state
          * @hide
@@ -3203,6 +3222,13 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_HIDE_SIGNAL_BARS = "statusbar_hide_signal_bars";
+
+        /**
+         * whether to hide the all signal bars (GSM + WIFI)
+         *
+         * @hide
+         */
+        public static final String STATUSBAR_HIDE_ALL_SIGNAL_BARS = "statusbar_hide_all_signal_bars";
 
         /**
          * Whether to show statusbar WiFi signal text
@@ -3873,6 +3899,12 @@ public final class Settings {
         public static final String THEME_WALLPAPER = "theme_wallpaper";
 
         /**
+         * Whether to dim the notification shade when pulling down the status bar
+         * @hide
+         */
+        public static final String NOTIFICATION_SHADE_DIM = "notification_shade_dim";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4246,6 +4278,19 @@ public final class Settings {
          * @hide
          */
         public static final String TOGGLES_STYLE = "toggls_style";
+
+        /*
+        * Sets the alpha (transparency) of notifications
+        * @hide
+        */
+        public static final String NOTIF_ALPHA = "notif_alpha";
+        
+       /*
+        * Sets the alpha (transparency) of bg notifications
+        * @hide
+        */
+        public static final String NOTIF_BG_ALPHA = "notif_bg_alpha";
+
     }
 
     /**
