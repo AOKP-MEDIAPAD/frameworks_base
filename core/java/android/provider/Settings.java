@@ -4284,6 +4284,12 @@ public final class Settings {
         * @hide
         */
         public static final String NOTIF_ALPHA = "notif_alpha";
+        
+       /*
+        * Sets the alpha (transparency) of bg notifications
+        * @hide
+        */
+        public static final String NOTIF_BG_ALPHA = "notif_bg_alpha";
 
     }
 

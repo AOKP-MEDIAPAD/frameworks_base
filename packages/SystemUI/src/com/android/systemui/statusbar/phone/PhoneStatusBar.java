@@ -2887,6 +2887,8 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.RIBBON_TEXT_COLOR[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
 		    resolver.registerContentObserver(Settings.System.getUriFor(
 		            Settings.System.NOTIF_ALPHA), false, this);
+		    resolver.registerContentObserver(Settings.System.getUriFor(
+		            Settings.System.NOTIF_BG_ALPHA), false, this);
         }
 
          @Override
@@ -2929,11 +2931,14 @@ public class PhoneStatusBar extends BaseStatusBar {
             disableAutoHide();
         }
         updateRibbonTargets();
-
-
         
         mNotificationShadeDim = Settings.System.getInt(cr,Settings.System.NOTIFICATION_SHADE_DIM, ActivityManager.isHighEndGfx() ? 1 : 0) == 1;
-			
+
+        Drawable background = mNotificationPanel.getBackground();
+        float notifBGAlpha = Settings.System.getFloat(cr, Settings.System.NOTIF_BG_ALPHA, 0.0f);
+        background.setAlpha((int) ((1-notifBGAlpha) * 255));
+
+
         float notifAlpha = Settings.System.getFloat(cr, Settings.System.NOTIF_ALPHA, 0.0f);
         if (mPile != null) {
           	int N = mNotificationData.size();
