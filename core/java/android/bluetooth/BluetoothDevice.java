@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+import java.util.Vector;
 
 /**
  * Represents a remote Bluetooth device. A {@link BluetoothDevice} lets you
@@ -110,6 +112,28 @@ public final class BluetoothDevice implements Parcelable {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_CLASS_CHANGED =
             "android.bluetooth.device.action.CLASS_CHANGED";
+
+     /**
+     * Broadcast Action: RSSI update from the remote device
+     * <p>Always contains the extra fields {@link #EXTRA_DEVICE} and {@link
+     * #EXTRA_RSSI}.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH} to receive.
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_RSSI_UPDATE =
+            "android.bluetooth.device.action.RSSI_UPDATE";
+    /**
+     * Broadcast Action: Negotiated connection parameters update
+     * for the connection between the Gatt server and the remote GATT
+     * client device
+     * <p>Always contains the extra fields {@link #EXTRA_CONN_INTERVAL}
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH} to receive.
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_LE_CONN_PARAMS =
+            "android.bluetooth.device.action.LE_CONN_PARAMS";
 
     /**
      * Broadcast Action: Indicates a low level (ACL) connection has been
@@ -203,6 +227,17 @@ public final class BluetoothDevice implements Parcelable {
      * Bluetooth hardware.
      */
     public static final String EXTRA_RSSI = "android.bluetooth.device.extra.RSSI";
+    /**
+     * Used as a String extra field in {ACTION_FOUND} intent.
+     * It contains the comma separated uuid string values of services.
+     * @hide
+     */
+    public static final String EXTRA_UUIDS = "android.bluetooth.device.extra.UUIDS";
+    /**
+     * Used as an UINT 16 extra field in {ACTION_LE_CONN_PARAMS} intent.
+     * It contains the negotiated connection interval value after establishing LE connection.
+     * @hide */
+    public static final String EXTRA_CONN_INTERVAL = "android.bluetooth.device.extra.CONN_INTERVAL";
 
     /**
      * Used as a Parcelable {@link BluetoothClass} extra field in {@link
@@ -229,6 +264,10 @@ public final class BluetoothDevice implements Parcelable {
       */
     public static final String EXTRA_PREVIOUS_BOND_STATE =
             "android.bluetooth.device.extra.PREVIOUS_BOND_STATE";
+
+    /** @hide */
+    public static final String EXTRA_SECURE_PAIRING = "android.bluetooth.device.extra.SECURE";
+
     /**
      * Indicates the remote device is not bonded (paired).
      * <p>There is no shared link key with the remote device, so communication
@@ -250,6 +289,12 @@ public final class BluetoothDevice implements Parcelable {
      * </i>
      */
     public static final int BOND_BONDED = 12;
+
+    /**
+     * This bonding state will be used, When auto pairing fails and
+     * retry the manual bonding process.
+     * @hide */
+    public static final int BOND_RETRY = 13;
 
     /** @hide */
     public static final String EXTRA_REASON = "android.bluetooth.device.extra.REASON";
@@ -320,6 +365,18 @@ public final class BluetoothDevice implements Parcelable {
 
     /**@hide*/
     public static final int REQUEST_TYPE_PHONEBOOK_ACCESS = 2;
+
+    /**@hide*/
+    public static final int REQUEST_TYPE_FILE_ACCESS = 3;
+
+    /**@hide*/
+    public static final int REQUEST_TYPE_MESSAGE_ACCESS = 4;
+
+    /**@hide*/
+    public static final int REQUEST_TYPE_SIM_ACCESS = 5;
+
+    /**@hide*/
+    public static final int REQUEST_TYPE_DUN_ACCESS = 6;
 
     /**
      * Used as an extra field in {@link #ACTION_CONNECTION_ACCESS_REQUEST} intents,
