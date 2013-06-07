@@ -589,7 +589,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     updateCarrierAndWifiLabelVisibility(false);
                 }});
         }
-
+		
         mCarrierAndWifiView = mStatusBarWindow.findViewById(R.id.carrier_wifi);
         mWifiView = mStatusBarWindow.findViewById(R.id.wifi_view);
 
@@ -608,28 +608,30 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
 
         mWifiLabel = (TextView)mStatusBarWindow.findViewById(R.id.wifi_text);
-        mNetworkController.addWifiLabelView(mWifiLabel);
 
-        mWifiLabel.addTextChangedListener(new TextWatcher() {
+        if(mWifiLabel != null)
+        	mNetworkController.addWifiLabelView(mWifiLabel);
 
-            public void afterTextChanged(Editable s) {
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count,
+        if(mWifiLabel != null)
+       		mWifiLabel.addTextChangedListener(new TextWatcher() {
+
+            	public void afterTextChanged(Editable s) {
+            	}
+            	public void beforeTextChanged(CharSequence s, int start, int count,
                     int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int before,
+            	}
+            	public void onTextChanged(CharSequence s, int start, int before,
                     int count) {
-                 if (Settings.System.getBoolean(mContext.getContentResolver(),
-                        Settings.System.NOTIFICATION_SHOW_WIFI_SSID, false) &&
-                        count > 0) {
-                    mWifiView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    mWifiView.setVisibility(View.GONE);
-                }
-            }
-
+                 	if (Settings.System.getBoolean(mContext.getContentResolver(),
+                     	   Settings.System.NOTIFICATION_SHOW_WIFI_SSID, false) &&
+                     	   count > 0) {
+                    	mWifiView.setVisibility(View.VISIBLE);
+                	}
+                	else
+                	{
+                    	mWifiView.setVisibility(View.GONE);
+                	}
+            	}
         });
 
         // set up the dynamic hide/show of the labels
