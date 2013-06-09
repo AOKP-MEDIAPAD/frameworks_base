@@ -3876,6 +3876,12 @@ public final class Settings {
         public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
 
         /**
+         * Always show settings button toggle
+         * @hide
+         */
+        public static final String NOTIFICATION_SETTINGS_BUTTON = "notification_settings_btn";
+
+        /**
          * Battery warning preferences
          *
          * 0 = show dialog + play sound (default)
