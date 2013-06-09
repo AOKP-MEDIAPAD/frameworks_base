@@ -553,7 +553,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         mScrollView = (ScrollView)mStatusBarWindow.findViewById(R.id.scroll);
         mScrollView.setVerticalScrollBarEnabled(false); // less drawing during pulldowns
-        mQuickSettingsButton.setOnLongClickListener(mSettingsLongClickListener);
+       // mQuickSettingsButton.setOnLongClickListener(mSettingsLongClickListener);
         if (!mNotificationPanelIsFullScreenWidth) {
             mScrollView.setSystemUiVisibility(
                     View.STATUS_BAR_DISABLE_NOTIFICATION_TICKER |
@@ -2973,7 +2973,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
 
         boolean notificationSettingsBtn = Settings.System.getInt(
-                    resolver, Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
+                    cr, Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
             mSettingsButton.setVisibility(notificationSettingsBtn ? View.VISIBLE : View.GONE);      
     }
 
