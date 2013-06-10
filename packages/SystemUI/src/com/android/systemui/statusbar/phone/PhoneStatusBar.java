@@ -2981,6 +2981,13 @@ public class PhoneStatusBar extends BaseStatusBar {
                     cr, Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
 		if(mSettingsButton!=null)
             mSettingsButton.setVisibility(notificationSettingsBtn ? View.VISIBLE : View.GONE);      
+
+ 		boolean notificationQSettingsBtn = Settings.System.getInt(
+                    cr, Settings.System.HIDE_QSETTINGS_BUTTON, 0) == 1;
+		if(mQuickSettingsButton!=null)
+            mQuickSettingsButton.setVisibility(!notificationQSettingsBtn ? View.VISIBLE : View.GONE);      
+
+
     }
 
     static public boolean shouldNotificationShadeDim() {
