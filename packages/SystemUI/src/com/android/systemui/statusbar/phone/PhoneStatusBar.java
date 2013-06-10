@@ -514,7 +514,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         boolean notificationSettingsBtn = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
-       
+        boolean hideQuickSettingsBtn = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HIDE_QSETTINGS_BUTTON, 0) == 1;
+                
         if(mSettingsButton != null)
          mSettingsButton.setOnClickListener(mSettingsButtonListener);
          
@@ -530,7 +532,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 if (mStatusBarView.hasFullWidthNotifications()) {
                     // the settings panel is hiding behind this button
                     mQuickSettingsButton.setImageResource(R.drawable.ic_notify_quicksettings);
-                    mQuickSettingsButton.setVisibility(View.VISIBLE);
+                    mQuickSettingsButton.setVisibility(!hideQuickSettingsBtn ? View.VISIBLE : View.GONE);
                 } else {
                     // there is a settings panel, but it's on the other side of the (large) screen
                     final View buttonHolder = mStatusBarWindow.findViewById(
@@ -542,7 +544,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 mSettingsButton.setVisibility(notificationSettingsBtn ? View.VISIBLE : View.GONE);
             } else {
                 // no settings panel, go straight to settings
-                mQuickSettingsButton.setVisibility(View.VISIBLE);
+                mQuickSettingsButton.setVisibility(!hideQuickSettingsBtn ? View.VISIBLE : View.GONE);
                 mQuickSettingsButton.setImageResource(R.drawable.ic_notify_settings);
                 mSettingsButton.setVisibility(View.GONE);
             }

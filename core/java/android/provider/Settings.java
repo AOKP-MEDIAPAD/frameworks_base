@@ -3881,6 +3881,12 @@ public final class Settings {
          */
         public static final String NOTIFICATION_SETTINGS_BUTTON = "notification_settings_btn";
 
+          /**
+         * Always hide quick settings button toggle
+         * @hide
+         */
+        public static final String HIDE_QSETTINGS_BUTTON = "hide_qsettings_btn";
+
         /**
          * Battery warning preferences
          *
