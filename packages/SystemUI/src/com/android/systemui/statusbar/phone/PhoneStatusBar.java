@@ -514,7 +514,10 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         boolean notificationSettingsBtn = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
-                
+       
+        if(mSettingsButton != null)
+         mSettingsButton.setOnClickListener(mSettingsButtonListener);
+         
         mQuickSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.quicksettings_button);
        
         SettingsObserver settingsObserver = new SettingsObserver(new Handler());
