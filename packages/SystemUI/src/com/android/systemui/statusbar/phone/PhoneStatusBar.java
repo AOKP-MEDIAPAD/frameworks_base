@@ -510,17 +510,17 @@ public class PhoneStatusBar extends BaseStatusBar {
             mDateTimeView.setEnabled(true);
         }
 
-        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
-        settingsObserver.observe();
-        updateSettings();
-
         mSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.settings_button);
 
         boolean notificationSettingsBtn = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
                 
         mQuickSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.quicksettings_button);
- 
+       
+        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
+        settingsObserver.observe();
+  		updateSettings();
+  		
         if (mQuickSettingsButton != null) {
             mQuickSettingsButton.setOnClickListener(mQuickSettingsButtonListener);
             if (mHasSettingsPanel) {
@@ -2974,6 +2974,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         boolean notificationSettingsBtn = Settings.System.getInt(
                     cr, Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
+		if(mSettingsButton!=null)
             mSettingsButton.setVisibility(notificationSettingsBtn ? View.VISIBLE : View.GONE);      
     }
 
