@@ -236,6 +236,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     View mDateTimeView; 
     View mClearButton;
     ImageView mSettingsButton, mQuickSettingsButton, mNotificationButton;
+	View mSettingsView
 
     private int shortClick = 0;
     private int longClick = 1;
@@ -519,6 +520,11 @@ public class PhoneStatusBar extends BaseStatusBar {
                 
         if(mSettingsButton != null)
          mSettingsButton.setOnClickListener(mSettingsButtonListener);
+
+        mSettingsView = mStatusBarWindow.findViewById(R.id.settings_button_holder);
+
+        if(mSettingsView != null)
+        	mSettingsView.setVisibility(!hideQuickSettingsBtn ? View.VISIBLE : View.GONE);
          
         mQuickSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.quicksettings_button);
        
@@ -2914,7 +2920,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 		    resolver.registerContentObserver(Settings.System.getUriFor(
 		            Settings.System.NOTIF_BG_ALPHA), false, this);
       		resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_SETTINGS_BUTTON), false, this);         
+                    Settings.System.NOTIFICATION_SETTINGS_BUTTON), false, this);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HIDE_QSETTINGS_BUTTON), false, this);  
         }
 
          @Override
@@ -2984,9 +2992,13 @@ public class PhoneStatusBar extends BaseStatusBar {
 
  		boolean notificationQSettingsBtn = Settings.System.getInt(
                     cr, Settings.System.HIDE_QSETTINGS_BUTTON, 0) == 1;
+
 		if(mQuickSettingsButton!=null)
             mQuickSettingsButton.setVisibility(!notificationQSettingsBtn ? View.VISIBLE : View.GONE);      
 
+ 		if(mSettingsView != null)
+        	mSettingsView.setVisibility(!notificationQSettingsBtn ? View.VISIBLE : View.GONE);
+  
 
     }
 
