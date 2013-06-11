@@ -236,7 +236,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     View mDateTimeView; 
     View mClearButton;
     ImageView mSettingsButton, mQuickSettingsButton, mNotificationButton;
-	View mSettingsView
+    View mSettingsView;
 
     private int shortClick = 0;
     private int longClick = 1;
