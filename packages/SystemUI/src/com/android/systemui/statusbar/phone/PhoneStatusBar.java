@@ -2537,13 +2537,14 @@ public class PhoneStatusBar extends BaseStatusBar {
     };
 
      private View.OnLongClickListener mLongSettingsButtonListener = new View.OnLongClickListener() {
-        public void onLongClick(View v) {
+        public boolean onLongClick(View v) {
             if (mHasSettingsPanel) {
                 animateExpandSettingsPanel();
             } else {
                 startActivityDismissingKeyguard(
                         new Intent(android.provider.Settings.ACTION_SETTINGS), true);
             }
+            return true;
         }
     };
 
