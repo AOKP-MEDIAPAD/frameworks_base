@@ -519,7 +519,10 @@ public class PhoneStatusBar extends BaseStatusBar {
                 Settings.System.HIDE_QSETTINGS_BUTTON, 0) == 1;
                 
         if(mSettingsButton != null)
-         mSettingsButton.setOnClickListener(mSettingsButtonListener);
+        {
+         	mSettingsButton.setOnClickListener(mSettingsButtonListener);
+			mSettingsButton.setOnLongClickListener(mLongSettingsButtonListener);
+        }
 
         mSettingsView = mStatusBarWindow.findViewById(R.id.settings_button_holder);
 
@@ -2524,6 +2527,17 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     private View.OnClickListener mQuickSettingsButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
+            if (mHasSettingsPanel) {
+                animateExpandSettingsPanel();
+            } else {
+                startActivityDismissingKeyguard(
+                        new Intent(android.provider.Settings.ACTION_SETTINGS), true);
+            }
+        }
+    };
+
+     private View.OnLongClickListener mLongSettingsButtonListener = new View.OnLongClickListener() {
+        public void onLongClick(View v) {
             if (mHasSettingsPanel) {
                 animateExpandSettingsPanel();
             } else {
