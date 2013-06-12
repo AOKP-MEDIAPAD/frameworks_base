@@ -236,7 +236,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     View mDateTimeView; 
     View mClearButton;
     ImageView mSettingsButton, mQuickSettingsButton, mNotificationButton;
-	View mSettingsView
+    View mSettingsView;
 
     private int shortClick = 0;
     private int longClick = 1;
@@ -2577,13 +2577,14 @@ public class PhoneStatusBar extends BaseStatusBar {
     };
 
      private View.OnLongClickListener mLongSettingsButtonListener = new View.OnLongClickListener() {
-        public void onLongClick(View v) {
+        public boolean onLongClick(View v) {
             if (mHasSettingsPanel) {
                 animateExpandSettingsPanel();
             } else {
                 startActivityDismissingKeyguard(
                         new Intent(android.provider.Settings.ACTION_SETTINGS), true);
             }
+            return true;
         }
     };
 
