@@ -3145,7 +3145,25 @@ public final class Settings {
         public static final String PIE_CHEVRON_RIGHT = "pie_chevron_right";
 
         /**
-         * Center Pie? Should default to 1 (yes, center)
+         * HALO, should default to 0 (no, do not show)
+         * @hide
+         */
+        public static final String HALO_ACTIVE = "halo_active";
+
+        /**
+         * HALO reversed?, should default to 1 (yes, reverse)
+         * @hide
+         */
+        public static final String HALO_REVERSED = "halo_reversed";
+
+        /**
+         * HALO hide?, should default to 0 (no, do not hide)
+         * @hide
+         */
+        public static final String HALO_HIDE = "halo_hide";
+
+        /**
+         * Swap volume buttons when the screen is rotated by 90 or 180 degrees
          * @hide
          */
         public static final String PIE_CENTER = "pie_center";
@@ -3874,6 +3892,18 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
+
+        /**
+         * Always show settings button toggle
+         * @hide
+         */
+        public static final String NOTIFICATION_SETTINGS_BUTTON = "notification_settings_btn";
+
+          /**
+         * Always hide quick settings button toggle
+         * @hide
+         */
+        public static final String HIDE_QSETTINGS_BUTTON = "hide_qsettings_btn";
 
         /**
          * Battery warning preferences
