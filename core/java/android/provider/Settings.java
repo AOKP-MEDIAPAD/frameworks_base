@@ -2671,6 +2671,13 @@ public final class Settings {
         };
 
         /**
+         * HALO pause activities?, defaults to 0 (no, do not pause) on devices which isLargeRAM() == true
+         * otherwise it defaults to 1 (yes, do pause)
+         * @hide
+         */
+        public static final String HALO_PAUSE = "halo_pause";
+
+        /**
          * Custom navring long press actions
          *
          * @hide
