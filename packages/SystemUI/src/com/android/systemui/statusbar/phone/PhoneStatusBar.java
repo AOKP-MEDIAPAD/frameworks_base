@@ -2580,6 +2580,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         public boolean onLongClick(View v) {
             if (mHasSettingsPanel) {
                 animateExpandSettingsPanel();
+                mSettingsButton.setOnLongClickListener(mLongQuickSettingsButtonListener);
             } else {
                 startActivityDismissingKeyguard(
                         new Intent(android.provider.Settings.ACTION_SETTINGS), true);
@@ -2587,6 +2588,22 @@ public class PhoneStatusBar extends BaseStatusBar {
             return true;
         }
     };
+
+   private View.OnLongClickListener mLongQuickSettingsButtonListener = new View.OnLongClickListener() {
+        public boolean onLongClick(View v) {
+            if (mHasSettingsPanel) {
+          
+                animateExpandNotificationsPanel();
+                mSettingsButton.setOnLongClickListener(mLongSettingsButtonListener);
+            } else {
+                startActivityDismissingKeyguard(
+                        new Intent(android.provider.Settings.ACTION_SETTINGS), true);
+            }
+            return true;
+        }
+    };
+
+    
 
     private final View.OnClickListener mSettingsButtonListener = new View.OnClickListener() {
         @Override
