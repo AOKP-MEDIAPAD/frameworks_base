@@ -2591,6 +2591,16 @@ public final class Settings {
          */
         public static final String MANUAL_SAFE_MEDIA_VOLUME = "manual_safe_media_volume";
 
+		
+ 		/**
+        * MediaScanner behavior on boot.
+        * 0 = enabled
+        * 1 = ask (notification)
+        * 2 = disabled
+        * @hide
+        */
+        public static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
+
         /**
          * whether to hide the Ram Usage Bar on recent switcher
          *
