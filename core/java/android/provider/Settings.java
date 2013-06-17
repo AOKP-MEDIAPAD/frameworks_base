@@ -2591,6 +2591,22 @@ public final class Settings {
          */
         public static final String MANUAL_SAFE_MEDIA_VOLUME = "manual_safe_media_volume";
 
+		
+ 		/**
+        * MediaScanner behavior on boot.
+        * 0 = enabled
+        * 1 = ask (notification)
+        * 2 = disabled
+        * @hide
+        */
+        public static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
+
+       /**
+         * HALO enabled, should default to 0 (HALO is disabled)
+         * @hide
+         */
+        public static final String HALO_ENABLED = "halo_enabled";
+
         /**
          * whether to hide the Ram Usage Bar on recent switcher
          *
@@ -2629,6 +2645,7 @@ public final class Settings {
          *
          * @hide
          */
+
         public static final String[] SPEN_ACTIONS = new String[] {
                 "spen_action_left",
                 "spen_action_right",
@@ -2808,6 +2825,12 @@ public final class Settings {
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
+         * Show the pending notification counts as overlays on the status bar
+         * @hide
+         */
+        public static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
+
+        /**
          * Clock Actions 0 = single, 1 = long, 2 = double click
          *
          * @hide
@@ -2860,11 +2883,36 @@ public final class Settings {
         public static final String NAVIGATION_BAR_SHOW_NOW = "navigation_bar_show_now";
 
         /**
+         * Used as a flag to determine if StatusBar hidden is checked
+         * @hide
+         */
+        public static final String HIDE_STATUSBAR = "hide_statusbar";
+
+        /**
          * Used as a flag to determine if we have statusbar hidden
          * @hide
          */
         public static final String STATUSBAR_HIDDEN = "statusbar_hidden";
-        
+
+        /**
+         * Whether Status bar should be hiidden when there are no
+         * notifications
+         * @hide
+         */
+        public static final String AUTO_HIDE_STATUSBAR = "auto_hide_statusbar";
+
+        /**
+         * Whether or not hidden Statusbar can be pulled down
+         * @hide
+         */
+        public static final String HIDDEN_STATUSBAR_PULLDOWN = "hidden_statusbar_pulldown";
+
+        /**
+         * Allows hidden Statusbar timeout to be configured
+         * @hide
+         */
+        public static final String HIDDEN_STATUSBAR_PULLDOWN_TIMEOUT = "hidden_statusbar_pulldown_timeout";
+
         /**
          * Statusbar toggle for quick settings
          * @hide
@@ -3770,6 +3818,13 @@ public final class Settings {
         public static final String QUICK_TOGGLE_FAV_CONTACT = "quick_toggle_fav_contact";
 
         /**
+         * enable and disable shade collapse on click
+         *
+         * @hide
+         */
+        public static final String SHADE_COLLAPSE_ALL = "shade_collapse_all";
+
+        /**
          * enable and disable fast toggle in settings
          *
          * @hide
@@ -3940,6 +3995,7 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_SHADE_DIM = "notification_shade_dim";
+
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -5481,6 +5537,12 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS =
                 Global.WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS;
+
+        /**
+         * Whether the Wimax should be on.  Only the WiMAX service should touch this.
+         * @hide
+         */	
+         public static final String WIMAX_ON = "wimax_on";
 
         /**
          * Whether background data usage is allowed.
