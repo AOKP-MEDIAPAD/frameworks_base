@@ -2601,6 +2601,12 @@ public final class Settings {
         */
         public static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
 
+       /**
+         * HALO enabled, should default to 0 (HALO is disabled)
+         * @hide
+         */
+        public static final String HALO_ENABLED = "halo_enabled";
+
         /**
          * whether to hide the Ram Usage Bar on recent switcher
          *
