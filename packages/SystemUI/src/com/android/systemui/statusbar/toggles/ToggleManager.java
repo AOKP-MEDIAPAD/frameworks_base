@@ -99,7 +99,7 @@ public class ToggleManager {
     public static final String CUSTOM_TOGGLE = "CUSTOM";
     public static final String STAYAWAKE_TOGGLE = "STAYAWAKE";
     public static final String WIRELESS_ADB_TOGGLE = "WIRELESSADB";
-
+    public static final String HALO_TOGGLE = "HALO";
     private int mStyle;
 
     public static final int STYLE_TILE = 0;
@@ -168,6 +168,7 @@ public class ToggleManager {
             toggleMap.put(CUSTOM_TOGGLE, CustomToggle.class);
             toggleMap.put(STAYAWAKE_TOGGLE, StayAwakeToggle.class);
             toggleMap.put(WIRELESS_ADB_TOGGLE, WirelessAdbToggle.class);
+			toggleMap.put(HALO_TOGGLE, HaloToggle.class);
             // toggleMap.put(BT_TETHER_TOGGLE, null);
         }
         return toggleMap;
