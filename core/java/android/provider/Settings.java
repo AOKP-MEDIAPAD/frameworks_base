@@ -2694,6 +2694,7 @@ public final class Settings {
          */
         public static final String HALO_PAUSE = "halo_pause";
 
+		/*
          * Whether to use a separate delay for "slide to unlock" and security
          * lock
          * @hide
