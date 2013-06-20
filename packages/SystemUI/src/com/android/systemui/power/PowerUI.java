@@ -74,9 +74,6 @@ public class PowerUI extends SystemUI {
     AlertDialog mLowBatteryDialog;
     TextView mBatteryLevelTextView;
 
-    // For filtering ACTION_POWER_DISCONNECTED on boot
-    boolean mIgnoreFirstPowerEvent = true;
-
     public void start() {
 
         mLowBatteryAlertCloseLevel = mContext.getResources().getInteger(
@@ -212,10 +209,6 @@ public class PowerUI extends SystemUI {
                 final boolean plugged = mPlugType != 0;
                 final boolean oldPlugged = oldPlugType != 0;
 
-                if (mIgnoreFirstPowerEvent && plugged) {
-                    mIgnoreFirstPowerEvent = false;
-                }
-
                 int oldBucket = findBatteryLevelBucket(oldBatteryLevel);
                 int bucket = findBatteryLevelBucket(mBatteryLevel);
 
@@ -269,13 +262,9 @@ public class PowerUI extends SystemUI {
                     || action.equals(Intent.ACTION_POWER_DISCONNECTED)) {
                 final ContentResolver cr = mContext.getContentResolver();
 
-                if (mIgnoreFirstPowerEvent) {
-                    mIgnoreFirstPowerEvent = false;
-                } else {
-                    if (Settings.Global.getInt(cr,
+                if (Settings.Global.getInt(cr,
                             Settings.Global.POWER_NOTIFICATIONS_ENABLED, 0) == 1) {
                         playPowerNotificationSound();
-                    }
                 }
             } else {
                 Slog.w(TAG, "unknown intent: " + intent);
