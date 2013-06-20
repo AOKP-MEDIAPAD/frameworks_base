@@ -2608,6 +2608,12 @@ public final class Settings {
         public static final String HALO_ENABLED = "halo_enabled";
 
         /**
+         * HALO active button hide, should default to 0 (HALO is disabled)
+         * @hide
+         */
+        public static final String HALO_HIDE_BUTTON = "halo_hide_button";
+
+        /**
          * whether to hide the Ram Usage Bar on recent switcher
          *
          * @hide
