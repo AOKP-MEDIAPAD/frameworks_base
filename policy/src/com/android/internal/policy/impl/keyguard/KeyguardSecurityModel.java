@@ -92,7 +92,7 @@ public class KeyguardSecurityModel {
             final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
             switch (security) {
                 case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
-                    if (mLockPatternUtils.isLockPasswordEnabled()) {
+                    if (mLockPatternUtils.isLockPasswordEnabled()
                             && mProfileManager.getActiveProfile().getScreenLockMode()
                                != Profile.LockMode.INSECURE) {
                         mode = SecurityMode.PIN;
@@ -104,7 +104,7 @@ public class KeyguardSecurityModel {
                 case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
                 case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
                 case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
-                    if (mLockPatternUtils.isLockPasswordEnabled()) {
+                    if (mLockPatternUtils.isLockPasswordEnabled()
                             && mProfileManager.getActiveProfile().getScreenLockMode()
                                != Profile.LockMode.INSECURE) {
                         mode = SecurityMode.Password;
@@ -115,7 +115,7 @@ public class KeyguardSecurityModel {
 
                 case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
                 case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
-                    if (mLockPatternUtils.isLockPatternEnabled()) {
+                    if (mLockPatternUtils.isLockPatternEnabled()
                             && mProfileManager.getActiveProfile().getScreenLockMode()
                                != Profile.LockMode.INSECURE) {
                         mode = mLockPatternUtils.isPermanentlyLocked() ?
