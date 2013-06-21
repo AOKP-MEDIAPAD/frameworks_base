@@ -407,6 +407,9 @@ public abstract class BaseStatusBar extends SystemUI implements
         mHaloActive = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.HALO_ACTIVE, 0) == 1;
 
+        mHaloButtonVisible = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HALO_HIDE_BUTTON, 0) == 0;
+                
         createAndAddWindows();
         // create WidgetView
         mWidgetView = new WidgetView(mContext,null);
@@ -513,7 +516,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (!mHaloEnabled) {
             mHaloButtonVisible = false;
         } else {
-            mHaloButtonVisible = true;
+            mHaloButtonVisible = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HALO_HIDE_BUTTON, 0) == 0) ? true : false;
         }
         if (mHaloButton != null) {
             mHaloButton.setVisibility(mHaloButtonVisible && !mHaloActive ? View.VISIBLE : View.GONE);

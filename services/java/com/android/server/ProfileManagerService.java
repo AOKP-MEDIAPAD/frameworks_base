@@ -20,6 +20,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.app.ActivityManagerNative;
 import android.app.IProfileManager;
 import android.app.NotificationGroup;
 import android.app.Profile;
@@ -29,6 +30,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.XmlResourceParser;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiManager;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.text.TextUtils;
@@ -54,6 +57,15 @@ public class ProfileManagerService extends IProfileManager.Stub {
      */
     public static final String INTENT_ACTION_PROFILE_SELECTED = "android.intent.action.PROFILE_SELECTED";
 
+    /**
+    * <p>Broadcast Action: Current profile has been updated. This is triggered every time the
+    * currently active profile is updated, instead of selected.</p>
+    * <p> For instance, this includes profile updates caused by a locale change, which doesn't
+    * trigger a profile selection, but causes its name to change.</p>
+    * @hide
+    */
+    public static final String INTENT_ACTION_PROFILE_UPDATED = "android.intent.action.PROFILE_UPDATED";
+
     public static final String PERMISSION_CHANGE_SETTINGS = "android.permission.WRITE_SETTINGS";
 
     private static final String PROFILE_FILENAME = "/data/system/profiles.xml";
@@ -76,6 +88,9 @@ public class ProfileManagerService extends IProfileManager.Stub {
     private Context mContext;
     private boolean mDirty;
 
+    private WifiManager mWifiManager;
+    private String mlastConnectedSSID;
+
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -86,12 +101,38 @@ public class ProfileManagerService extends IProfileManager.Stub {
                 initialize();
             } else if (action.equals(Intent.ACTION_SHUTDOWN)) {
                 persistIfDirty();
+
+            } else if (action.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)) {
+                SupplicantState state = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE);
+                int triggerState;
+                switch (state) {
+                    case COMPLETED:
+                        triggerState = Profile.TriggerState.ON_CONNECT;
+                        mlastConnectedSSID = getActiveSSID();
+                        break;
+                    case DISCONNECTED:
+                        triggerState = Profile.TriggerState.ON_DISCONNECT;
+                        break;
+                    default:
+                        return;
+                }
+                for (Profile p : mProfiles.values()) {
+                    if (triggerState ==  p.getWifiTrigger(mlastConnectedSSID)) {
+                        try {
+                            setActiveProfile(p, true);
+                        } catch (RemoteException e) {
+                            Log.e(TAG, "Could not update profile on wifi AP change", e);
+                        }
+                    }
+                }
             }
         }
     };
 
     public ProfileManagerService(Context context) {
         mContext = context;
+        mWifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
+        mlastConnectedSSID = getActiveSSID();
 
         mWildcardGroup = new NotificationGroup(
                 context.getString(com.android.internal.R.string.wildcardProfile),
@@ -103,6 +144,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(Intent.ACTION_SHUTDOWN);
+        filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
         mContext.registerReceiver(mIntentReceiver, filter);
     }
 
@@ -137,6 +179,10 @@ public class ProfileManagerService extends IProfileManager.Stub {
                 Log.e(TAG, "Error loading xml from resource: ", ex);
             }
         }
+    }
+
+    private String getActiveSSID() {
+        return mWifiManager.getConnectionInfo().getSSID().replace("\"", "");
     }
 
     @Override
@@ -218,6 +264,15 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
                 restoreCallingIdentity(token);
                 persistIfDirty();
+            } else if (lastProfile != mActiveProfile &&
+                    ActivityManagerNative.isSystemReady()) {
+                // Something definitely changed: notify.
+                long token = clearCallingIdentity();
+                Intent broadcast = new Intent(INTENT_ACTION_PROFILE_UPDATED);
+                broadcast.putExtra("name", mActiveProfile.getName());
+                broadcast.putExtra("uuid", mActiveProfile.getUuid().toString());
+                mContext.sendBroadcastAsUser(broadcast, UserHandle.ALL);
+                restoreCallingIdentity(token);
             }
             return true;
         } catch (Exception ex) {
