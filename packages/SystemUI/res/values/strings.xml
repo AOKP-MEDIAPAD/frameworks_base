@@ -621,6 +621,7 @@
     <string name="quick_settings_screenshot">Screenshot</string>
 	<string name="quick_settings_halo_on_label">Halo Active</string>
     <string name="quick_settings_halo_off_label">Halo NonActive</string>
+	<string name="quick_settings_profile_label">Profiles</string>
 
     <!--  RamBar -->
     <string name="memory">RAM</string>
