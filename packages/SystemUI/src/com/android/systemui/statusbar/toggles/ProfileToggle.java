@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.systemui.quicksettings;
+package com.android.systemui.statusbar.toggles;
 
 import android.app.AlertDialog;
 import android.app.Profile;
@@ -113,7 +113,6 @@ public class ProfileToggle extends BaseToggle {
                                 dialog.cancel();
                             }
                         }).create();
-        mStatusbarService.animateCollapsePanels();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
         dialog.show();
     }
