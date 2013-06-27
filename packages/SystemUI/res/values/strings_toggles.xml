@@ -51,5 +51,6 @@
     <string name="toggle_STAYAWAKE">Stay Awake</string>
     <string name="toggle_WIRELESSADB">Wireless ADB</string>
 	<string name="toggle_HALO">HALO</string>
-    <string name="toggle_PROFILE">PROFILE</string>
+    <string name="toggle_PROFILE">Profiles</string>
+    <string name="toggle_MUSIC">Music</string>
 </resources>
