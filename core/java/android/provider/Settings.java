@@ -2451,6 +2451,17 @@ public final class Settings {
         public static final String POINTER_SPEED = "pointer_speed";
 
         /**
+         * Style color of Battery
+        */
+        public static final String STATUSBAR_BATTERY_COLOR = "statusbar_battery_color";
+
+        /**
+         * Style color toggle of Battery
+        */
+        public static final String STATUSBAR_BATTERY_COLOR_TOGGLE = "statusbar_battery_color_toggle";
+
+
+        /**
          * Style of Battery
          * 0 - Icon Only
          * 1 - Text Only

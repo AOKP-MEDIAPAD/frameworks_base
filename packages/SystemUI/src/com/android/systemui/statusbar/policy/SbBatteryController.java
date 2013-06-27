@@ -72,7 +72,9 @@ public class SbBatteryController extends LinearLayout {
     private boolean mPlugged = false;
     private int mStockFontSize;
     private int mFontSize;
-
+    protected int mBatteryColor;
+	protected int mBatteryColorToggle;
+	 
     public static final int STYLE_ICON_ONLY = 0;
     public static final int STYLE_TEXT_ONLY = 1;
     public static final int STYLE_ICON_TEXT = 2;
@@ -237,7 +239,13 @@ public class SbBatteryController extends LinearLayout {
                 Settings.System.STATUSBAR_FONT_SIZE, mStockFontSize);
         int width = StatusBarHelpers.getIconWidth(mContext, mFontSize);
         mBatteryIcon.getLayoutParams().width = width;
-
+        
+		mBatteryColor = Settings.System.getInt(cr,
+                Settings.System.STATUSBAR_BATTERY_COLOR, 0);
+				
+		mBatteryColorToggle = Settings.System.getInt(cr,
+                Settings.System.STATUSBAR_BATTERY_COLOR_TOGGLE, 0);	
+							
         switch (mBatteryStyle) {
             case STYLE_ICON_ONLY:
                 mBatteryCenterText.setVisibility(View.GONE);
@@ -289,6 +297,13 @@ public class SbBatteryController extends LinearLayout {
             mBatteryTextOnly_Low.setTextSize(mFontSize);
             mBatteryTextOnly_Plugged.setTextSize(mFontSize);
         }
+		
+		if(mBatteryColorToggle == 1 && mBatteryStyle == STYLE_TEXT_ONLY && mBatteryColor!= 0)
+		{
+			mBatteryTextOnly.setTextColor(mBatteryColor);
+			mBatteryTextOnly_Low.setTextColor(mBatteryColor);
+			mBatteryTextOnly_Plugged.setTextColor(mBatteryColor); 
+		}
         setBatteryIcon(mLevel, mPlugged);
 
     }
