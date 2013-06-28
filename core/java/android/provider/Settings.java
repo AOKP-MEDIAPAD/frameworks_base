@@ -2525,6 +2525,21 @@ public final class Settings {
         */
         public static final String STATUSBAR_FONT_SIZE = "statusbar_font_size";
 
+
+        /**
+         * Status bar color enable
+         * @hide
+        */
+        public static final String STATUSBAR_ICON_COLOR_ENABLE = "statusbar_icon_color_enable";
+
+        
+        /**
+         * Status bar color filter
+         * @hide
+        */
+        public static final String STATUSBAR_ICON_COLOR = "statusbar_icon_color";
+
+        
         /**
          * Show the pending notification counts as overlays on the statusbar
          * @hide

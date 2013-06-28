@@ -286,6 +286,14 @@ public class SignalClusterView
         boolean clustdefault = getResources().getBoolean(R.bool.statusbar_alt_signal_layout);
         showingAltCluster = Settings.System.getBoolean(resolver,
                 Settings.System.STATUSBAR_SIGNAL_CLUSTER_ALT, clustdefault);
+
+
+        int isIconColor = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_ICON_COLOR_ENABLE,0);
+
+        int iconColor = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_ICON_COLOR,0);
+                
         if (fontSize != mFontSize) {
             mFontSize = fontSize;
             mWiFiText.setTextSize(mFontSize);
@@ -295,6 +303,14 @@ public class SignalClusterView
             mMobile.getLayoutParams().width = width;
             mAirplane.getLayoutParams().width = width;
         }
+        
+        if(isIconColor == 1)
+        {
+            mWifi.setColorFilter(iconColor);
+            mMobile.setColorFilter(iconColor);
+            mAirplane.setColorFilter(iconColor);
+        }
+
         apply();
     }
 }
