@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.graphics.PorterDuff;
 
 import com.android.internal.util.aokp.StatusBarHelpers;
 import com.android.systemui.R;
@@ -306,9 +307,10 @@ public class SignalClusterView
         
         if(isIconColor == 1)
         {
-            mWifi.setColorFilter(iconColor);
-            mMobile.setColorFilter(iconColor);
-            mAirplane.setColorFilter(iconColor);
+            mWifi.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            mMobile.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            mMobileType.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            mAirplane.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
         }
 
         apply();
