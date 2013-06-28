@@ -201,7 +201,7 @@ public class SignalClusterView
         if (mWifiVisible) {
             
             Drawable wifiBitmap = mContext.getResources().getDrawable(mWifiStrengthId);
-            if (!isIconColor) {
+            if (isIconColor == 0) {
                 wifiBitmap.clearColorFilter();
             } else {
                 wifiBitmap.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
@@ -232,7 +232,7 @@ public class SignalClusterView
                 
             if(mMobileStrengthId != 0) {
                 Drawable mobileBitmap = mContext.getResources().getDrawable(mMobileStrengthId);
-                if (!isIconColor) {
+                if (isIconColor == 0) {
                     mobileBitmap.clearColorFilter();
                 } else {
                     mobileBitmap.setColorFilter(iconColor.lastColor, PorterDuff.Mode.SRC_IN);
