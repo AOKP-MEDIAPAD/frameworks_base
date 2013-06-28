@@ -183,10 +183,10 @@ public class SignalClusterView
     // Run after each indicator change.
     private void apply() {
         
-        int isIconColor = Settings.System.getInt(resolver,
+        int isIconColor = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUSBAR_ICON_COLOR_ENABLE,0);
 
-        int iconColor = Settings.System.getInt(resolver,
+        int iconColor = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUSBAR_ICON_COLOR,0);
         
         if(isIconColor == 1)
@@ -235,7 +235,7 @@ public class SignalClusterView
                 if (isIconColor == 0) {
                     mobileBitmap.clearColorFilter();
                 } else {
-                    mobileBitmap.setColorFilter(iconColor.lastColor, PorterDuff.Mode.SRC_IN);
+                    mobileBitmap.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
                 }
                 mMobile.setImageDrawable(mobileBitmap);
             }
