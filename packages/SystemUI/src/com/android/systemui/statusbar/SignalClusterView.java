@@ -30,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
 
 import com.android.internal.util.aokp.StatusBarHelpers;
@@ -182,32 +181,11 @@ public class SignalClusterView
 
     // Run after each indicator change.
     private void apply() {
-        
-        int isIconColor = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUSBAR_ICON_COLOR_ENABLE,0);
-
-        int iconColor = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUSBAR_ICON_COLOR,0);
-        
-        if(isIconColor == 1)
-        {
-           mMobileType.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
-           mAirplane.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
-        }
-
-
         if (mWifiGroup == null) return;
 
         if (mWifiVisible) {
-            
-            Drawable wifiBitmap = mContext.getResources().getDrawable(mWifiStrengthId);
-            if (isIconColor == 0) {
-                wifiBitmap.clearColorFilter();
-            } else {
-                wifiBitmap.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
-            }
-            mWifi.setImageDrawable(wifiBitmap);
             mWifiGroup.setVisibility(View.VISIBLE);
+            mWifi.setImageResource(mWifiStrengthId);
             mWifiActivity.setImageResource(mWifiActivityId);
             mWifiGroup.setContentDescription(mWifiDescription);
             if (showingWiFiText){
@@ -229,18 +207,8 @@ public class SignalClusterView
                     mWifiStrengthId, mWifiActivityId));
 
         if (mMobileVisible && !mIsAirplaneMode) {
-                
-            if(mMobileStrengthId != 0) {
-                Drawable mobileBitmap = mContext.getResources().getDrawable(mMobileStrengthId);
-                if (isIconColor == 0) {
-                    mobileBitmap.clearColorFilter();
-                } else {
-                    mobileBitmap.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
-                }
-                mMobile.setImageDrawable(mobileBitmap);
-            }
-            mMobile.setImageResource(mMobileStrengthId);
             mMobileGroup.setVisibility(View.VISIBLE);
+            mMobile.setImageResource(mMobileStrengthId);
             mMobileActivity.setImageResource(mMobileActivityId);
             mMobileType.setImageResource(mMobileTypeId);
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
@@ -320,6 +288,12 @@ public class SignalClusterView
         showingAltCluster = Settings.System.getBoolean(resolver,
                 Settings.System.STATUSBAR_SIGNAL_CLUSTER_ALT, clustdefault);
 
+
+        int isIconColor = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_ICON_COLOR_ENABLE,0);
+
+        int iconColor = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_ICON_COLOR,0);
                 
         if (fontSize != mFontSize) {
             mFontSize = fontSize;
@@ -330,8 +304,15 @@ public class SignalClusterView
             mMobile.getLayoutParams().width = width;
             mAirplane.getLayoutParams().width = width;
         }
- 
+        
+        if(isIconColor == 1)
+        {
+            mWifi.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            mMobile.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            mAirplane.setColorFilter(iconColor);
+			mMobileType.setColorFilter(iconColor);
+        }
+
         apply();
     }
 }
-
