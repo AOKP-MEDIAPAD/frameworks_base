@@ -33,6 +33,16 @@ public final class ConnectionSettings implements Parcelable {
     public static final int PROFILE_CONNECTION_GPS = 4;
     public static final int PROFILE_CONNECTION_SYNC = 5;
     public static final int PROFILE_CONNECTION_BLUETOOTH = 7;
+    public static final int PROFILE_CONNECTION_NFC = 8;
+    public static final int PROFILE_CONNECTION_2G3G = 9;
+
+    // retrieved from Phone.apk
+    private static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
+    private static final String EXTRA_NETWORK_MODE = "networkMode";
+
+    private static final int CM_MODE_2G = 0;
+    private static final int CM_MODE_3G = 1;
+    private static final int CM_MODE_BOTH = 2;
 
     /** @hide */
     public static final Parcelable.Creator<ConnectionSettings> CREATOR = new Parcelable.Creator<ConnectionSettings>() {
