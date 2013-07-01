@@ -144,10 +144,27 @@ public class Traffic extends TextView {
 		ContentResolver resolver = mContext.getContentResolver();
 		showTraffic = (Settings.System.getInt(resolver,
 				Settings.System.STATUS_BAR_TRAFFIC, 1) == 0);
+
+		int fontSize = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_FONT_SIZE, 0);
+                
+		int showToggle = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_TRAFFIC_COLOR_TOGGLE, 0);
+           
+		int trafficColor = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_TRAFFIC_COLOR, 0);     
+
 		if (showTraffic && getConnectAvailable()) {
 			if (mAttached) {
 				updateTraffic();
 			}
+			
+			if(fontSize != 0)
+				setTextSize(fontSize);
+				
+            if(showToggle == 1 && trafficColor != 0)
+                setTextColor(trafficColor);
+				
 			setVisibility(View.VISIBLE);
 		} else
 			setVisibility(View.GONE);

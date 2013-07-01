@@ -2509,12 +2509,25 @@ public final class Settings {
         public static final String POINTER_SPEED = "pointer_speed";
 
         /**
+         * Style color of traffic
+        */
+        public static final String STATUSBAR_TRAFFIC_COLOR = "statusbar_traffic_color";
+
+        /**
+         * Style color toggle of traffic
+        */
+        public static final String STATUSBAR_TRAFFIC_COLOR_TOGGLE = "statusbar_traffic_color_toggle";
+
+        /**
          * Style color of Battery
         */
         public static final String STATUSBAR_BATTERY_COLOR = "statusbar_battery_color";
 
         /**
          * Style color toggle of Battery
+         * 0 - disable
+         * 1 - enable all color
+         * 2 - enable only normal battery state color
         */
         public static final String STATUSBAR_BATTERY_COLOR_TOGGLE = "statusbar_battery_color_toggle";
 
