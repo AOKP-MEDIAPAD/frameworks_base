@@ -2584,12 +2584,6 @@ public final class Settings {
         public static final String STATUS_BAR_TRAFFIC = "status_bar_traffic"; 
 
         /**
-         * Whether to show the battery bar
-         * @hide
-         */
-        public static final String STATUSBAR_BATTERY_BAR = "statusbar_battery_bar";
-
-        /**
          * Status bar color enable
          * @hide
         */
