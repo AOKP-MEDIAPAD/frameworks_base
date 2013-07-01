@@ -2380,6 +2380,12 @@ public final class Settings {
          */
         public static final String QUICK_SETTINGS_BACKGROUND_COLOR = "quick_settings_background_color";
 
+         /**
+         * DPS dep 
+         * @hide
+         */
+        public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
+
         /**
          * User color for tile background pressed
          * @hide
