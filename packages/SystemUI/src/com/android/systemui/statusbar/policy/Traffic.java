@@ -142,8 +142,8 @@ public class Traffic extends TextView {
 
 	private void updateSettings() {
 		ContentResolver resolver = mContext.getContentResolver();
-		showTraffic = (Settings.System.getInt(resolver,
-				Settings.System.STATUS_BAR_TRAFFIC, 0) == 1);
+		showTraffic = Settings.System.getBoolean(resolver,
+				Settings.System.STATUS_BAR_TRAFFIC, false);
 
 		int fontSize = Settings.System.getInt(resolver,
                 Settings.System.STATUSBAR_FONT_SIZE, 0);
