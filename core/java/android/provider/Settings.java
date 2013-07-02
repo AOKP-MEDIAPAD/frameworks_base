@@ -2366,6 +2366,39 @@ public final class Settings {
         public static final String DESK_DOCK_SOUND = Global.DESK_DOCK_SOUND;
 
         /**
+         * User configurable background for qs tiles
+         * 0 = random colors
+         * 1 = colorpicker preference
+         * 2 = default background
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_BACKGROUND_STYLE = "quick_settings_background_style";
+
+        /**
+         * User color for tile background
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_BACKGROUND_COLOR = "quick_settings_background_color";
+
+         /**
+         * DPS dep 
+         * @hide
+         */
+        public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
+
+        /**
+         * User color for tile background pressed
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_BACKGROUND_PRESSED_COLOR = "quick_settings_background_pressed_color";
+
+        /**
+         * User color for text background
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_TEXT_COLOR = "quick_settings_text_color";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#DESK_UNDOCK_SOUND}
          * instead
          * @hide
@@ -2414,6 +2447,37 @@ public final class Settings {
         public static final String SIP_RECEIVE_CALLS = "sip_receive_calls";
 
         /**
+         * Random user selected colors
+         * @hide
+         */
+        public static final String RANDOM_COLOR_ONE = "random_color_one";
+
+        /**
+         * @hide
+         */
+        public static final String RANDOM_COLOR_TWO = "random_color_two";
+
+        /**
+         * @hide
+         */
+        public static final String RANDOM_COLOR_THREE = "random_color_three";
+
+        /**
+         * @hide
+         */
+        public static final String RANDOM_COLOR_FOUR = "random_color_four";
+
+        /**
+         * @hide
+         */
+        public static final String RANDOM_COLOR_FIVE = "random_color_five";
+
+        /**
+         * @hide
+         */
+        public static final String RANDOM_COLOR_SIX = "random_color_six";
+
+        /**
          * Call Preference String.
          * "SIP_ALWAYS" : Always use SIP with network access
          * "SIP_ADDRESS_ONLY" : Only if destination is a SIP address
@@ -2451,12 +2515,25 @@ public final class Settings {
         public static final String POINTER_SPEED = "pointer_speed";
 
         /**
+         * Style color of traffic
+        */
+        public static final String STATUSBAR_TRAFFIC_COLOR = "statusbar_traffic_color";
+
+        /**
+         * Style color toggle of traffic
+        */
+        public static final String STATUSBAR_TRAFFIC_COLOR_TOGGLE = "statusbar_traffic_color_toggle";
+
+        /**
          * Style color of Battery
         */
         public static final String STATUSBAR_BATTERY_COLOR = "statusbar_battery_color";
 
         /**
          * Style color toggle of Battery
+         * 0 - disable
+         * 1 - enable all color
+         * 2 - enable only normal battery state color
         */
         public static final String STATUSBAR_BATTERY_COLOR_TOGGLE = "statusbar_battery_color_toggle";
 
@@ -2525,6 +2602,11 @@ public final class Settings {
         */
         public static final String STATUSBAR_FONT_SIZE = "statusbar_font_size";
 
+        /**
+         * Network speed indicator
+         * @hide
+         */
+        public static final String STATUS_BAR_TRAFFIC = "status_bar_traffic"; 
 
         /**
          * Status bar color enable

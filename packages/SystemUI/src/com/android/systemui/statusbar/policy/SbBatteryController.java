@@ -304,6 +304,9 @@ public class SbBatteryController extends LinearLayout {
 			mBatteryTextOnly_Low.setTextColor(mBatteryColor);
 			mBatteryTextOnly_Plugged.setTextColor(mBatteryColor); 
 		}
+		else if(mBatteryColorToggle == 2 && mBatteryStyle == STYLE_TEXT_ONLY && mBatteryColor!= 0)
+			mBatteryTextOnly.setTextColor(mBatteryColor);
+
         setBatteryIcon(mLevel, mPlugged);
 
     }
