@@ -42,7 +42,7 @@ public class HaloToggle extends StatefulToggle {
     @Override
     public boolean onLongClick(View v) {
     Intent intent = new Intent("android.intent.action.MAIN");
-        intent.setClassName("com.android.settings", "com.android.settings.halo.Halo");
+        intent.setClassName("com.android.settings", "com.android.settings.Settings$HaloSettingsActivity");
         intent.addCategory("android.intent.category.LAUNCHER");
         startActivity(intent);
         return super.onLongClick(v);
