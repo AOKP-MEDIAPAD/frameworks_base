@@ -514,6 +514,8 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                 if (mOverX) {
                     Settings.System.putInt(mContext.getContentResolver(),
                             Settings.System.HALO_ACTIVE, 0);
+					Settings.System.putInt(mContext.getContentResolver(),
+                            Settings.System.HALO_ENABLED, 0);
                     return true;
                 }
                 
