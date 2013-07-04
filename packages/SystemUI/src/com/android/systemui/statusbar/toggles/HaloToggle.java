@@ -9,18 +9,15 @@ import android.database.ContentObserver;
 import android.os.Handler;
 import android.provider.Settings;;
 import android.view.View;
-import com.android.internal.util.aokp.SysHelpers;
 
 import com.android.systemui.R;
 
 public class HaloToggle extends StatefulToggle {
-   
-    SettingsObserver mSettingsObserver;
+
 
     @Override
     public void init(Context c, int style) {
         super.init(c, style);
-        mSettingsObserver = new SettingsObserver(new Handler());
         scheduleViewUpdate();
     }
 
@@ -45,7 +42,7 @@ public class HaloToggle extends StatefulToggle {
     @Override
     public boolean onLongClick(View v) {
     Intent intent = new Intent("android.intent.action.MAIN");
-        intent.setClassName("com.android.settings", "com.android.settings.Settings$HaloActivity");
+        intent.setClassName("com.android.settings", "com.android.settings.halo.Halo");
         intent.addCategory("android.intent.category.LAUNCHER");
         startActivity(intent);
         return super.onLongClick(v);
@@ -60,24 +57,5 @@ public class HaloToggle extends StatefulToggle {
         setLabel(enabled ? R.string.quick_settings_halo_on_label
                 : R.string.quick_settings_halo_off_label);
         super.updateView();
-    }
-
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-            observe();
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.HALO_ENABLED), false,
-                    this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            SysHelpers.restartSystemUI();
-        }
     }
 }
