@@ -70,7 +70,10 @@ public class Clock extends TextView {
     public static final int WEEKDAY_STYLE_GONE   = 0;
     public static final int WEEKDAY_STYLE_SMALL  = 1;
     public static final int WEEKDAY_STYLE_NORMAL = 2;
-
+    public static final int WEEKDAY_STYLE_M_E = 3;
+	public static final int WEEKDAY_STYLE_FULL = 4;
+	public static final int WEEKDAY_STYLE_TEXT_FULL = 5;
+			
     protected int mWeekdayStyle = WEEKDAY_STYLE_GONE;
 
     public static final int STYLE_HIDE_CLOCK     = 0;
@@ -189,10 +192,24 @@ public class Clock extends TextView {
         String result = sdf.format(mCalendar.getTime());
 
         if (mWeekdayStyle != WEEKDAY_STYLE_GONE) {
-            todayIs = (new SimpleDateFormat("E")).format(mCalendar.getTime()) + " ";
+            
+			if(mWeekdayStyle == WEEKDAY_STYLE_M_E)
+				todayIs = (new SimpleDateFormat("M E")).format(mCalendar.getTime()) + " ";
+			else if (mWeekdayStyle == WEEKDAY_STYLE_FULL)			
+				todayIs = (new SimpleDateFormat("yyyy-MM-dd")).format(mCalendar.getTime()) + " ";
+			else if (mWeekdayStyle == WEEKDAY_STYLE_TEXT_FULL)		
+				todayIs = (new SimpleDateFormat("yyyy M E")).format(mCalendar.getTime()) + " ";
+			else
+				todayIs = (new SimpleDateFormat("E")).format(mCalendar.getTime()) + " ";
+				
             result = todayIs + result;
+			
         }
-
+		
+		
+  //  public static final int WEEKDAY_STYLE_M_E = 3;
+	///public static final int WEEKDAY_STYLE_FULL = 4;
+///	public static final int WEEKDAY_STYLE_TEXT_FULL = 5;
         SpannableStringBuilder formatted = new SpannableStringBuilder(result);
 
         if (!b24) {
