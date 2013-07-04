@@ -206,10 +206,6 @@ public class Clock extends TextView {
 			
         }
 		
-		
-  //  public static final int WEEKDAY_STYLE_M_E = 3;
-	///public static final int WEEKDAY_STYLE_FULL = 4;
-///	public static final int WEEKDAY_STYLE_TEXT_FULL = 5;
         SpannableStringBuilder formatted = new SpannableStringBuilder(result);
 
         if (!b24) {
