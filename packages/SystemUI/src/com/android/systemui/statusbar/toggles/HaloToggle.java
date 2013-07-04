@@ -9,7 +9,7 @@ import android.database.ContentObserver;
 import android.os.Handler;
 import android.provider.Settings;;
 import android.view.View;
-import com.android.settings.util.Helpers;
+import com.android.internal.util.aokp.SysHelpers;
 
 import com.android.systemui.R;
 
