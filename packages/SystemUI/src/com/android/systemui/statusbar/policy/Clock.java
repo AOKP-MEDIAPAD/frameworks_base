@@ -70,9 +70,6 @@ public class Clock extends TextView {
     public static final int WEEKDAY_STYLE_GONE   = 0;
     public static final int WEEKDAY_STYLE_SMALL  = 1;
     public static final int WEEKDAY_STYLE_NORMAL = 2;
-    public static final int WEEKDAY_STYLE_M_E = 3;
-	public static final int WEEKDAY_STYLE_FULL = 4;
-	public static final int WEEKDAY_STYLE_TEXT_FULL = 5;
 			
     protected int mWeekdayStyle = WEEKDAY_STYLE_GONE;
 
@@ -193,12 +190,19 @@ public class Clock extends TextView {
 
         if (mWeekdayStyle != WEEKDAY_STYLE_GONE) {
             
-			if(mWeekdayStyle == WEEKDAY_STYLE_M_E)
-				todayIs = (new SimpleDateFormat("M E")).format(mCalendar.getTime()) + " ";
-			else if (mWeekdayStyle == WEEKDAY_STYLE_FULL)			
+			if(mWeekdayStyle == 3)
+				todayIs = (new SimpleDateFormat("E dd")).format(mCalendar.getTime()) + " ";
+			else if (mWeekdayStyle == 4)			
 				todayIs = (new SimpleDateFormat("yyyy-MM-dd")).format(mCalendar.getTime()) + " ";
-			else if (mWeekdayStyle == WEEKDAY_STYLE_TEXT_FULL)		
-				todayIs = (new SimpleDateFormat("yyyy M E dd")).format(mCalendar.getTime()) + " ";
+			else if (mWeekdayStyle == 5)		
+				todayIs = (new SimpleDateFormat("yyyy/MM/dd")).format(mCalendar.getTime()) + " ";
+			else if (mWeekdayStyle == 6)		
+				todayIs = (new SimpleDateFormat("dd.MM.yy")).format(mCalendar.getTime()) + " ";
+			else if (mWeekdayStyle == 7)		
+				todayIs = (new SimpleDateFormat("dd.MM")).format(mCalendar.getTime()) + " ";
+			else if (mWeekdayStyle == 8)		
+				todayIs = (new SimpleDateFormat("dd.MM.yyy")).format(mCalendar.getTime()) + " ";
+
 			else
 				todayIs = (new SimpleDateFormat("E")).format(mCalendar.getTime()) + " ";
 				
