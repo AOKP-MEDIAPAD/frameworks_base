@@ -201,7 +201,7 @@ public class Clock extends TextView {
 			else if (mWeekdayStyle == 7)		
 				todayIs = (new SimpleDateFormat("dd.MM")).format(mCalendar.getTime()) + " ";
 			else if (mWeekdayStyle == 8)		
-				todayIs = (new SimpleDateFormat("dd.MM.yyy")).format(mCalendar.getTime()) + " ";
+				todayIs = (new SimpleDateFormat("dd.MM.yyyy")).format(mCalendar.getTime()) + " ";
 
 			else
 				todayIs = (new SimpleDateFormat("E")).format(mCalendar.getTime()) + " ";
