@@ -101,6 +101,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private boolean mHighEndGfx;
     boolean ramBarEnabled;
     boolean mRecentsKillAllEnabled;
+    private RecentsActivity mRecentsActivity;
 
     TextView mBackgroundProcessText;
     TextView mForegroundProcessText;
@@ -289,6 +290,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         mRecentItemLayoutId = a.getResourceId(R.styleable.RecentsPanelView_recentItemLayout, 0);
         mRecentTasksLoader = RecentTasksLoader.getInstance(context);
+        mRecentsActivity = (RecentsActivity) context;
         a.recycle();
         mSettingsObserver = new SettingsObserver(mHandler);
     }
