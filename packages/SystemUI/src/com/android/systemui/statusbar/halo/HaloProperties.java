@@ -40,7 +40,9 @@ public class HaloProperties extends FrameLayout {
         BLACK_X,
         BACK_LEFT,
         BACK_RIGHT,
-        DISMISS
+        DISMISS,
+        SILENCE,
+        CLEAR_ALL
     }
 
     private LayoutInflater mInflater;
@@ -52,6 +54,8 @@ public class HaloProperties extends FrameLayout {
     private Drawable mHaloBackL;
     private Drawable mHaloBackR;
     private Drawable mHaloBlackX;
+    private Drawable mHaloClearAll;
+    private Drawable mHaloSilence;
     private Drawable mHaloCurrentOverlay;
 
     protected View mHaloBubble;
@@ -62,16 +66,6 @@ public class HaloProperties extends FrameLayout {
 
     protected View mHaloNumberView;
     protected TextView mHaloNumber;
-
-    private static int mStyle;
-    private static final int BLUE = 0;
-    private static final int GREEN = 1;
-    private static final int WHITE = 2;
-    private static final int PURPLE = 3;
-    private static final int RED = 4;
-    private static final int YELLOW = 5;
-    private static final int PINK = 6;
-    private static final int BLACK = 7;
 
     private boolean mEnableColor;
 
@@ -91,6 +85,8 @@ public class HaloProperties extends FrameLayout {
         mHaloBackL = mContext.getResources().getDrawable(R.drawable.halo_back_left);
         mHaloBackR = mContext.getResources().getDrawable(R.drawable.halo_back_right);
         mHaloBlackX = mContext.getResources().getDrawable(R.drawable.halo_black_x);
+        mHaloClearAll = mContext.getResources().getDrawable(R.drawable.halo_clear_all);
+        mHaloSilence = mContext.getResources().getDrawable(R.drawable.halo_silence);
 
         mHaloBubble = mInflater.inflate(R.layout.halo_bubble, null);
         mHaloBg = (ImageView) mHaloBubble.findViewById(R.id.halo_bg);
@@ -98,21 +94,11 @@ public class HaloProperties extends FrameLayout {
         mHaloIcon = (ImageView) mHaloBubble.findViewById(R.id.app_icon);
         mHaloOverlay = (ImageView) mHaloBubble.findViewById(R.id.halo_overlay);
 
-        final float scale = getResources().getDisplayMetrics().density;
-        int l = (int) (20 * scale + 0.5f);
-        int t = (int) (17 * scale + 0.5f);
-        int r = (int) (20 * scale + 0.5f);
-        int b = (int) (30 * scale + 0.5f);
-
         mHaloContentView = mInflater.inflate(R.layout.halo_speech, null);
         mHaloTickerContent = mHaloContentView.findViewById(R.id.ticker);
         mHaloTextViewR = (TextView) mHaloTickerContent.findViewById(R.id.bubble_r);
-        mHaloTextViewR.setPadding(l, t, r, b);
-        mHaloTextViewR.setMaxLines(3);
         mHaloTextViewR.setAlpha(0f);
         mHaloTextViewL = (TextView) mHaloTickerContent.findViewById(R.id.bubble_l);
-        mHaloTextViewL.setPadding(l, t, r, b);
-        mHaloTextViewL.setMaxLines(3);
         mHaloTextViewL.setAlpha(0f);
 
         updateColorView();
@@ -194,6 +180,12 @@ public class HaloProperties extends FrameLayout {
             case DISMISS:
                 d = mHaloDismiss;
                 break;
+            case SILENCE:
+                d = mHaloSilence;
+                break;
+            case CLEAR_ALL:
+                d = mHaloClearAll;
+                break;
         }
 
         if (d != mHaloCurrentOverlay) {
@@ -201,9 +193,7 @@ public class HaloProperties extends FrameLayout {
             mHaloCurrentOverlay = d;
         }
 
-        mHaloOverlayAnimator.animate(ObjectAnimator.ofFloat(mHaloOverlay, "alpha", overlayAlpha).setDuration(250),
-                new DecelerateInterpolator(), null);
-
+        mHaloOverlay.setAlpha(overlayAlpha);
         updateResources();
     }
 
@@ -280,9 +270,7 @@ public class HaloProperties extends FrameLayout {
            mHaloBgCustom.setVisibility(View.GONE);
 
            // Speech bubbles
-           mHaloTextViewL.setBackgroundResource(R.drawable.bubble_l);
            mHaloTextViewL.setTextColor(getResources().getColor(R.color.halo_text_color));
-           mHaloTextViewR.setBackgroundResource(R.drawable.bubble_r);
            mHaloTextViewR.setTextColor(getResources().getColor(R.color.halo_text_color));
         }
     }
