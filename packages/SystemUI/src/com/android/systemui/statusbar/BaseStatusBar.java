@@ -336,9 +336,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             final int action = event.getAction();
-
-            if (!mPieControlPanel.isShowing() && ! mPieControlPanel.getKeyguardStatus()) {
-                switch(action) {
+            if (!showPie())
+                updatePieControls();
+            else
+            {
+                if (!mPieControlPanel.isShowing()) {
+                    switch(action) {
                     case MotionEvent.ACTION_DOWN:
                         centerPie = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_CENTER, 1) == 1;
                         actionDown = true;
@@ -361,9 +364,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                             mPieControlPanel.onTouchEvent(event);
                             actionDown = false;
                         }
+                    }
+                } else {
+                    return mPieControlPanel.onTouchEvent(event);
                 }
-            } else {
-                return mPieControlPanel.onTouchEvent(event);
             }
             return false;
         }
