@@ -35,6 +35,12 @@ public class Traffic extends TextView {
 			ContentResolver resolver = mContext.getContentResolver();
 			resolver.registerContentObserver(Settings.System
 					.getUriFor(Settings.System.STATUS_BAR_TRAFFIC), false, this);
+			resolver.registerContentObserver(Settings.System
+					.getUriFor(Settings.System.STATUSBAR_TRAFFIC_COLOR), false, this);
+			resolver.registerContentObserver(Settings.System
+					.getUriFor(Settings.System.STATUSBAR_TRAFFIC_COLOR_TOGGLE), false, this);
+			resolver.registerContentObserver(Settings.System
+					.getUriFor(Settings.System.STATUSBAR_FONT_SIZE), false, this);
 		}
 
 		@Override

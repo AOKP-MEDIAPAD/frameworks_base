@@ -222,6 +222,12 @@ public class SbBatteryController extends LinearLayout {
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.STATUSBAR_BATTERY_ICON), false,
                     this);
+			resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.STATUSBAR_BATTERY_COLOR_TOGGLE), false,
+                    this);
+			resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.STATUSBAR_BATTERY_COLOR), false,
+                    this);
         }
 
         @Override
