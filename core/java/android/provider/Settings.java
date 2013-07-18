@@ -2758,6 +2758,20 @@ public final class Settings {
          */
         public static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
 
+        /**
+         * Switch between different recents style
+         *
+         * @hide
+         */
+        public static final String RECENTS_STYLE = "recents_style";
+
+        /**
+         * Choose kill-all location in recents
+         *
+         * @hide
+         */
+        public static final String RECENTS_CLEAR = "recents_clear";
+        
        /**
         * Lefty mode
         * @hide
