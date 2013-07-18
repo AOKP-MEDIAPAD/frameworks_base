@@ -20,10 +20,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="toast_rotation_locked" msgid="7609673011431556092">"Выбрана только альбомная ориентация экрана."</string>
-	
-	<!-- Halo -->
-    <string name="halo_dismiss">Скрыть уведомление</string>
-    <string name="halo_hide">Скрыть Halo</string>
-    <string name="halo_clear_all">Скрыть все уведомления</string>
-    <string name="halo_silence">Скрыть и заглушить Halo до след. уведомления</string>
+
 </resources>
