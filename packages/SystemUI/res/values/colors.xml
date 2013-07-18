@@ -58,4 +58,7 @@
     <color name="battery_background">#ffffff</color>
     <color name="status">#ffffff</color>
 
+   <!-- Halo colors -->
+   <color name="halo_ping_color">#ff33b5e5</color>
+   <color name="halo_text_color">#ffffffff</color>
 </resources>

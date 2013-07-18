@@ -4210,6 +4210,10 @@ public class Activity extends ContextThemeWrapper
         }
     }
 
+    public void finishFloating() {
+        mMainThread.performFinishFloating();
+    }
+
     /**
      * Finish this activity as well as all activities immediately below it
      * in the current task that have the same affinity.  This is typically
@@ -5116,7 +5120,8 @@ public class Activity extends ContextThemeWrapper
         mFragments.attachActivity(this, mContainer, null);
 
         boolean floating = (intent.getFlags()&Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
-        if (intent != null && floating) {
+        boolean history = (intent.getFlags()&Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
+        if (intent != null && floating && !history) {
             TypedArray styleArray = context.obtainStyledAttributes(info.theme, com.android.internal.R.styleable.Window);
             TypedValue backgroundValue = styleArray.peekValue(com.android.internal.R.styleable.Window_windowBackground);
 

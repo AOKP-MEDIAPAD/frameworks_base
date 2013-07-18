@@ -2647,6 +2647,14 @@ public final class Settings {
         public static final String STATUSBAR_BATTERY_BAR_THICKNESS = "statusbar_battery_bar_thickness";
 
         /**
+         * HALO size fraction, default is 1.0f (normal)
+         * @hide
+         */
+        public static final String HALO_SIZE = "halo_size";
+
+        /**
+         * HALO pause activities?, defaults to 0 (no, do not pause) on devices which isLargeRAM() == true
+         * otherwise it defaults to 1 (yes, do pause)
          * @hide
          */
         public static final String STATUSBAR_BATTERY_BAR_STYLE = "statusbar_battery_bar_style";
@@ -2750,6 +2758,20 @@ public final class Settings {
          */
         public static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
 
+        /**
+         * Switch between different recents style
+         *
+         * @hide
+         */
+        public static final String RECENTS_STYLE = "recents_style";
+
+        /**
+         * Choose kill-all location in recents
+         *
+         * @hide
+         */
+        public static final String RECENTS_CLEAR = "recents_clear";
+        
        /**
         * Lefty mode
         * @hide

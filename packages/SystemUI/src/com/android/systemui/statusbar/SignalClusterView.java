@@ -266,6 +266,12 @@ public class SignalClusterView
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUSBAR_SIGNAL_CLUSTER_ALT), false,
                     this);
+			resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_ICON_COLOR_ENABLE), false,
+                    this);
+			resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_ICON_COLOR), false,
+                    this);
             updateSettings();
         }
 

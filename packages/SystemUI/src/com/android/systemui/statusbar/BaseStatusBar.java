@@ -336,9 +336,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             final int action = event.getAction();
-
-            if (!mPieControlPanel.isShowing() && ! mPieControlPanel.getKeyguardStatus()) {
-                switch(action) {
+            if (!showPie())
+                updatePieControls();
+            else
+            {
+                if (!mPieControlPanel.isShowing()) {
+                    switch(action) {
                     case MotionEvent.ACTION_DOWN:
                         centerPie = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_CENTER, 1) == 1;
                         actionDown = true;
@@ -361,9 +364,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                             mPieControlPanel.onTouchEvent(event);
                             actionDown = false;
                         }
+                    }
+                } else {
+                    return mPieControlPanel.onTouchEvent(event);
                 }
-            } else {
-                return mPieControlPanel.onTouchEvent(event);
             }
             return false;
         }
@@ -499,6 +503,13 @@ public abstract class BaseStatusBar extends SystemUI implements
                 updateHalo();
             }});
 
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.HALO_SIZE), false, new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {                
+                restartHalo();
+            }});
+
         updateHalo();
 
         SettingsObserver settingsObserver = new SettingsObserver(new Handler());
@@ -522,6 +533,16 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mHaloButton != null) {
             mHaloButton.setVisibility(mHaloButtonVisible && !mHaloActive ? View.VISIBLE : View.GONE);
         }
+    }
+
+    protected void restartHalo() {
+        if (mHalo != null) {
+            mHalo.cleanUp();
+            mWindowManager.removeView(mHalo);
+            mHalo = null;
+        }
+        updateNotificationIcons();
+        updateHalo();
     }
 
     protected void updateHalo() {
@@ -1328,21 +1349,29 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private Bitmap createRoundIcon(StatusBarNotification notification) {
         // Construct the round icon
-        BitmapDrawable bd = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.halo_bg);
-        int iconSize = bd.getBitmap().getWidth();
-        int smallIconSize = mContext.getResources().getDimensionPixelSize(R.dimen.status_bar_icon_size);        
+        final float haloSize = Settings.System.getFloat(mContext.getContentResolver(),
+                Settings.System.HALO_SIZE, 1.0f);
+        int iconSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.halo_bubble_size) * haloSize);
+        int smallIconSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.status_bar_icon_size) * haloSize);
+        int largeIconWidth = notification.notification.largeIcon != null ? (int)(notification.notification.largeIcon.getWidth() * haloSize) : 0;
+        int largeIconHeight = notification.notification.largeIcon != null ? (int)(notification.notification.largeIcon.getHeight() * haloSize) : 0;
         Bitmap roundIcon = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(roundIcon);
         canvas.drawARGB(0, 0, 0, 0);
 
-        if (notification.notification.largeIcon != null) {           
+        // If we have a bona fide avatar here stretching at least over half the size of our
+        // halo-bubble, we'll use that one and cut it round
+        if (notification.notification.largeIcon != null
+                && largeIconWidth >= iconSize / 2) {
             Paint smoothingPaint = new Paint();
             smoothingPaint.setAntiAlias(true);
             smoothingPaint.setFilterBitmap(true);
             smoothingPaint.setDither(true);
             canvas.drawCircle(iconSize / 2, iconSize / 2, iconSize / 2.3f, smoothingPaint);
             smoothingPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(notification.notification.largeIcon, iconSize, iconSize, true);
+            final int newWidth = iconSize;
+            final int newHeight = largeIconWidth / largeIconHeight * iconSize;
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(notification.notification.largeIcon, newWidth, newHeight, true);
             canvas.drawBitmap(scaledBitmap, null, new Rect(0, 0,
                     iconSize, iconSize), smoothingPaint);
         } else {

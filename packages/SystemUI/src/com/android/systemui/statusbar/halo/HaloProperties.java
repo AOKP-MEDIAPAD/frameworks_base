@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.graphics.ColorFilterMaker;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.provider.Settings;
@@ -28,8 +29,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.animation.ObjectAnimator;
 import android.view.animation.DecelerateInterpolator;
+import android.util.TypedValue;
+import android.provider.Settings;
 
 import com.android.systemui.R;
 
@@ -40,7 +45,9 @@ public class HaloProperties extends FrameLayout {
         BLACK_X,
         BACK_LEFT,
         BACK_RIGHT,
-        DISMISS
+        DISMISS,
+        SILENCE,
+        CLEAR_ALL
     }
 
     private LayoutInflater mInflater;
@@ -52,31 +59,27 @@ public class HaloProperties extends FrameLayout {
     private Drawable mHaloBackL;
     private Drawable mHaloBackR;
     private Drawable mHaloBlackX;
+    private Drawable mHaloClearAll;
+    private Drawable mHaloSilence;
     private Drawable mHaloCurrentOverlay;
 
     protected View mHaloBubble;
-    protected ImageView mHaloBg, mHaloIcon, mHaloOverlay;
+    protected ImageView mHaloBg, mHaloBgCustom, mHaloIcon, mHaloOverlay;
 
     protected View mHaloContentView, mHaloTickerContent;
     protected TextView mHaloTextViewR, mHaloTextViewL;
+    protected RelativeLayout mHaloTickerContainer;
 
     protected View mHaloNumberView;
     protected TextView mHaloNumber;
 
-    private static int mStyle;
-    private static final int BLUE = 0;
-    private static final int GREEN = 1;
-    private static final int WHITE = 2;
-    private static final int PURPLE = 3;
-    private static final int RED = 4;
-    private static final int YELLOW = 5;
-    private static final int PINK = 6;
-    private static final int BLACK = 7;
+    private boolean mEnableColor;
 
     private boolean mAttached = false;
 
     private SettingsObserver mSettingsObserver;
     private Handler mHandler;
+    private float mFraction = 1.0f;
 
     CustomObjectAnimator mHaloOverlayAnimator;
 
@@ -89,13 +92,17 @@ public class HaloProperties extends FrameLayout {
         mHaloBackL = mContext.getResources().getDrawable(R.drawable.halo_back_left);
         mHaloBackR = mContext.getResources().getDrawable(R.drawable.halo_back_right);
         mHaloBlackX = mContext.getResources().getDrawable(R.drawable.halo_black_x);
+        mHaloClearAll = mContext.getResources().getDrawable(R.drawable.halo_clear_all);
+        mHaloSilence = mContext.getResources().getDrawable(R.drawable.halo_silence);
 
         mHaloBubble = mInflater.inflate(R.layout.halo_bubble, null);
         mHaloBg = (ImageView) mHaloBubble.findViewById(R.id.halo_bg);
+        mHaloBgCustom = (ImageView) mHaloBubble.findViewById(R.id.halo_bg_custom);
         mHaloIcon = (ImageView) mHaloBubble.findViewById(R.id.app_icon);
         mHaloOverlay = (ImageView) mHaloBubble.findViewById(R.id.halo_overlay);
 
         mHaloContentView = mInflater.inflate(R.layout.halo_speech, null);
+        mHaloTickerContainer = (RelativeLayout)mHaloContentView.findViewById(R.id.container);
         mHaloTickerContent = mHaloContentView.findViewById(R.id.ticker);
         mHaloTextViewR = (TextView) mHaloTickerContent.findViewById(R.id.bubble_r);
         mHaloTextViewR.setAlpha(0f);
@@ -107,6 +114,10 @@ public class HaloProperties extends FrameLayout {
         mHaloNumberView = mInflater.inflate(R.layout.halo_number, null);
         mHaloNumber = (TextView) mHaloNumberView.findViewById(R.id.number);
         mHaloNumber.setAlpha(0f);
+
+        mFraction = Settings.System.getFloat(mContext.getContentResolver(),
+                Settings.System.HALO_SIZE, 1.0f);
+        setHaloSize(mFraction);
 
         mHaloOverlayAnimator = new CustomObjectAnimator(this);
         mHandler = new Handler();
@@ -133,6 +144,29 @@ public class HaloProperties extends FrameLayout {
             mAttached = false;
         }
     } 
+
+    public void setHaloSize(float fraction) {
+
+        final int newBubbleSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.halo_bubble_size) * fraction);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(newBubbleSize, newBubbleSize);
+        mHaloBg.setLayoutParams(layoutParams);
+        mHaloBgCustom.setLayoutParams(layoutParams);
+        mHaloIcon.setLayoutParams(layoutParams);
+        mHaloOverlay.setLayoutParams(layoutParams);
+
+        final int newNumberSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.halo_number_size) * fraction);
+        final int newNumberTextSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.halo_number_text_size) * fraction);
+        LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(newNumberSize, newNumberSize);
+        mHaloNumber.setLayoutParams(layoutParams2);
+        mHaloNumber.setTextSize(TypedValue.COMPLEX_UNIT_PX, newNumberTextSize);
+
+        final int newSpeechTextSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.halo_speech_text_size) * fraction);
+        mHaloTextViewR.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSpeechTextSize);
+        mHaloTextViewL.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSpeechTextSize);
+
+        updateResources();
+        updateColorView();
+    }
 
     public void setHaloX(int value) {
         mHaloX = value;
@@ -181,6 +215,12 @@ public class HaloProperties extends FrameLayout {
             case DISMISS:
                 d = mHaloDismiss;
                 break;
+            case SILENCE:
+                d = mHaloSilence;
+                break;
+            case CLEAR_ALL:
+                d = mHaloClearAll;
+                break;
         }
 
         if (d != mHaloCurrentOverlay) {
@@ -188,13 +228,17 @@ public class HaloProperties extends FrameLayout {
             mHaloCurrentOverlay = d;
         }
 
-        mHaloOverlayAnimator.animate(ObjectAnimator.ofFloat(mHaloOverlay, "alpha", overlayAlpha).setDuration(250),
-                new DecelerateInterpolator(), null);
-
+        mHaloOverlay.setAlpha(overlayAlpha);
         updateResources();
     }
 
     public void updateResources() {
+
+        final int iconSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.halo_bubble_size) * mFraction);
+        final int newSize = (int)(getWidth() * 0.9f) - iconSize;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(newSize, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mHaloTickerContainer.setLayoutParams(layoutParams);
+
         mHaloContentView.measure(MeasureSpec.getSize(mHaloContentView.getMeasuredWidth()),
                 MeasureSpec.getSize(mHaloContentView.getMeasuredHeight()));
         mHaloContentView.layout(0, 0, 0, 0);
@@ -235,7 +279,7 @@ public class HaloProperties extends FrameLayout {
 
     private void updateColorView() {
         ContentResolver cr = mContext.getContentResolver();
-        boolean mEnableColor = Settings.System.getInt(cr,
+        mEnableColor = Settings.System.getInt(cr,
                Settings.System.HALO_COLORS, 0) == 1;
         int mCircleColor = Settings.System.getInt(cr,
                Settings.System.HALO_CIRCLE_COLOR, 0xFF33B5E5);
@@ -246,19 +290,29 @@ public class HaloProperties extends FrameLayout {
 
         if (mEnableColor) {
            // Ring
-           mHaloBg.setBackgroundResource(R.drawable.halo_bg);
-           mHaloBg.getBackground().setColorFilter(ColorFilterMaker.
+           mHaloBgCustom.setBackgroundResource(R.drawable.halo_bg_custom);
+           mHaloBgCustom.getBackground().setColorFilter(ColorFilterMaker.
                    changeColorAlpha(mCircleColor, .32f, 0f));
+           mHaloBg.setVisibility(View.GONE);
+           mHaloBgCustom.setVisibility(View.VISIBLE);
 
            // Speech bubbles
-           mHaloTextViewL.setBackgroundResource(R.drawable.bubble_l);
+           mHaloTextViewL.setBackgroundResource(R.drawable.bubble_l_custom);
            mHaloTextViewL.getBackground().setColorFilter(ColorFilterMaker.
                     changeColorAlpha(mBubbleColor, .32f, 0f));
            mHaloTextViewL.setTextColor(mTextColor);
-           mHaloTextViewR.setBackgroundResource(R.drawable.bubble_r);
+           mHaloTextViewR.setBackgroundResource(R.drawable.bubble_r_custom);
            mHaloTextViewR.getBackground().setColorFilter(ColorFilterMaker.
                     changeColorAlpha(mBubbleColor, .32f, 0f));
            mHaloTextViewR.setTextColor(mTextColor);
+        } else {
+           // Ring
+           mHaloBg.setVisibility(View.VISIBLE);
+           mHaloBgCustom.setVisibility(View.GONE);
+
+           // Speech bubbles
+           mHaloTextViewL.setTextColor(getResources().getColor(R.color.halo_text_color));
+           mHaloTextViewR.setTextColor(getResources().getColor(R.color.halo_text_color));
         }
     }
 }

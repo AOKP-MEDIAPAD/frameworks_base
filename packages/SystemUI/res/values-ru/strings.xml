@@ -319,4 +319,11 @@
     <string name="quick_settings_adb_off">Wireless ADB выкл</string>
     <string name="toggles">Переключатели</string>
     <string name="ribbon">Лента</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+		
+	<!-- Halo -->
+    <string name="halo_dismiss">Скрыть уведомление</string>
+    <string name="halo_hide">Скрыть Halo</string>
+    <string name="halo_clear_all">Скрыть все уведомления</string>
+    <string name="halo_silence">Скрыть и заглушить Halo до след. уведомления</string>
 </resources>

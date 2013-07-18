@@ -89,9 +89,12 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private boolean mWaitingForWindowAnimation;
     private long mWindowAnimationStartTime;
 
-    private Button mRecentsKillAllButton;
+    private ImageView mRecentsKillAllButtonBR;
+    private ImageView mRecentsKillAllButtonBL;
+    private ImageView mRecentsKillAllButtonTR;
+    private ImageView mRecentsKillAllButtonTL;
     private LinearColorBar mRamUsageBar;
-
+    
     private RecentTasksLoader mRecentTasksLoader;
     private ArrayList<TaskDescription> mRecentTaskDescriptions;
     private TaskDescriptionAdapter mListAdapter;
@@ -101,6 +104,17 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private boolean mHighEndGfx;
     boolean ramBarEnabled;
     boolean mRecentsKillAllEnabled;
+    
+    private static int mRecentClear;
+    private static final int CLEAR_DISABLE = 0;
+    private static final int CLEAR_BOTTOM_RIGHT = 1;
+    private static final int CLEAR_BOTTOM_LEFT = 2;
+    private static final int CLEAR_TOP_RIGHT = 3;
+    private static final int CLEAR_TOP_LEFT = 4;
+
+    private RecentsActivity mRecentsActivity;
+    private static final int RECENTS_STOCK = 0;
+    private static final int RECENTS_RB = 1;
 
     TextView mBackgroundProcessText;
     TextView mForegroundProcessText;
@@ -289,6 +303,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         mRecentItemLayoutId = a.getResourceId(R.styleable.RecentsPanelView_recentItemLayout, 0);
         mRecentTasksLoader = RecentTasksLoader.getInstance(context);
+        mRecentsActivity = (RecentsActivity) context;
         a.recycle();
         mSettingsObserver = new SettingsObserver(mHandler);
     }
@@ -495,8 +510,29 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mRamUsageBar = (LinearColorBar) findViewById(R.id.ram_usage_bar);
         mForegroundProcessText = (TextView) findViewById(R.id.foregroundText);
         mBackgroundProcessText = (TextView) findViewById(R.id.backgroundText);
-        mRecentsKillAllButton = (Button) findViewById(R.id.recents_kill_all_button);
-        mRecentsKillAllButton.setOnClickListener(new OnClickListener() {
+        mRecentsKillAllButtonBR = (ImageView) findViewById(R.id.recents_kill_all_buttonBR);
+        mRecentsKillAllButtonBR.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killAllRecentApps();
+            }
+        });
+        mRecentsKillAllButtonBL = (ImageView) findViewById(R.id.recents_kill_all_buttonBL);
+        mRecentsKillAllButtonBL.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killAllRecentApps();
+            }
+        });
+        mRecentsKillAllButtonTR = (ImageView) findViewById(R.id.recents_kill_all_buttonTR);
+        mRecentsKillAllButtonTR.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killAllRecentApps();
+            }
+        });
+        mRecentsKillAllButtonTL = (ImageView) findViewById(R.id.recents_kill_all_buttonTL);
+        mRecentsKillAllButtonTL.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 killAllRecentApps();
@@ -725,18 +761,25 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         holder.thumbnailViewImage, bm, 0, 0, null).toBundle();
 
         show(false);
-        if (ad.taskId >= 0) {
+        Intent intent = ad.intent;
+        boolean floating = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+        if (ad.taskId >= 0 && !floating) {
             // This is an active task; it should just go to the foreground.
             mAm.moveTaskToFront(ad.taskId, ActivityManager.MOVE_TASK_WITH_HOME,
                     opts);
         } else {
-            Intent intent = ad.intent;
-            intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
-                    | Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                    | Intent.FLAG_ACTIVITY_NEW_TASK);
+            boolean backPressed = mRecentsActivity != null && mRecentsActivity.mBackPressed;
+            if (!floating || !backPressed) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
+                        | Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
             if (DEBUG) Log.v(TAG, "Starting activity " + intent);
             context.startActivityAsUser(intent, opts,
                     new UserHandle(UserHandle.USER_CURRENT));
+            if (floating && mRecentsActivity != null) {
+                mRecentsActivity.finish();
+            }
         }
         if (usingDrawingCache) {
             holder.thumbnailViewImage.setDrawingCacheEnabled(false);
@@ -819,10 +862,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     ViewHolder viewHolder = (ViewHolder) selectedView.getTag();
                     if (viewHolder != null) {
                         final TaskDescription ad = viewHolder.taskDescription;
+                        dismissAndGoBack();
                         Intent intent = ad.intent;
                         intent.addFlags(Intent.FLAG_FLOATING_WINDOW
                                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        dismissAndGoBack();
+                        intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
                         getContext().startActivity(intent);
                     }
                 } else {
@@ -893,7 +937,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     .getUriFor(Settings.System.RAM_USAGE_BAR),
                     false, this);
             resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.RECENT_KILL_ALL_BUTTON),
+                    .getUriFor(Settings.System.RECENTS_CLEAR),
                     false, this);
             updateSettings();
         }
@@ -907,15 +951,43 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     public void updateSettings() {
         ramBarEnabled = Settings.System.getBoolean(mContext.getContentResolver(),
                 Settings.System.RAM_USAGE_BAR, false);
-        mRecentsKillAllEnabled = Settings.System.getBoolean(
-                mContext.getContentResolver(),
-                Settings.System.RECENT_KILL_ALL_BUTTON, false);
+        mRecentClear = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.RECENTS_CLEAR, 0);
 
         if (mRamUsageBar != null) {
             mRamUsageBar.setVisibility(ramBarEnabled ? View.VISIBLE : View.GONE);
         }
-        if (mRecentsKillAllButton != null) {
-            mRecentsKillAllButton.setVisibility(mRecentsKillAllEnabled ? View.VISIBLE : View.GONE);
+        switch (mRecentClear) {
+            case CLEAR_DISABLE:
+            mRecentsKillAllButtonBR.setVisibility(View.GONE);
+            mRecentsKillAllButtonBL.setVisibility(View.GONE);
+            mRecentsKillAllButtonTR.setVisibility(View.GONE);
+            mRecentsKillAllButtonTL.setVisibility(View.GONE);
+                 break;
+            case CLEAR_BOTTOM_RIGHT:
+            mRecentsKillAllButtonBR.setVisibility(View.VISIBLE);
+            mRecentsKillAllButtonBL.setVisibility(View.GONE);
+            mRecentsKillAllButtonTR.setVisibility(View.GONE);
+            mRecentsKillAllButtonTL.setVisibility(View.GONE);
+                 break;
+            case CLEAR_BOTTOM_LEFT:
+            mRecentsKillAllButtonBR.setVisibility(View.GONE);
+            mRecentsKillAllButtonBL.setVisibility(View.VISIBLE);
+            mRecentsKillAllButtonTR.setVisibility(View.GONE);
+            mRecentsKillAllButtonTL.setVisibility(View.GONE);
+                 break;
+            case CLEAR_TOP_RIGHT:
+            mRecentsKillAllButtonBR.setVisibility(View.GONE);
+            mRecentsKillAllButtonBL.setVisibility(View.GONE);
+            mRecentsKillAllButtonTR.setVisibility(View.VISIBLE);
+            mRecentsKillAllButtonTL.setVisibility(View.GONE);
+                 break;
+            case CLEAR_TOP_LEFT:
+            mRecentsKillAllButtonBR.setVisibility(View.GONE);
+            mRecentsKillAllButtonBL.setVisibility(View.GONE);
+            mRecentsKillAllButtonTR.setVisibility(View.GONE);
+            mRecentsKillAllButtonTL.setVisibility(View.VISIBLE);
+                 break;
         }
     }
 }
