@@ -7,4 +7,4 @@ LOCAL_SRC_FILES := $(call all-subdir-java-files)
 
 LOCAL_CERTIFICATE := platform
 
-include $(FrameworkCoreTests_BUILD_PACKAGE)
+include $(FrameworkServicesTests_BUILD_PACKAGE)

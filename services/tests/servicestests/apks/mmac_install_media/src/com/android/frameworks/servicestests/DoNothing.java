@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.frameworks.coretests;
+package com.android.frameworks.servicestests;
 
 public class DoNothing {
 
