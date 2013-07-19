@@ -1322,6 +1322,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mHaloButton != null) {
             mHaloButton.setEnabled(isDeviceProvisioned());
         }
+
+        setNotificationAlphaHelper();
     }
 
     @Override
@@ -2917,8 +2919,6 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mNotificationPanelMinHeightFrac < 0f || mNotificationPanelMinHeightFrac > 1f) {
             mNotificationPanelMinHeightFrac = 0f;
         }
-
-        setNotificationAlphaHelper();
     }
 
     //
