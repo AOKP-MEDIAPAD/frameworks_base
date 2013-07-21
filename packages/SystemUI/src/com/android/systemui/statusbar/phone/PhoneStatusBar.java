@@ -1322,6 +1322,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mHaloButton != null) {
             mHaloButton.setEnabled(isDeviceProvisioned());
         }
+
+        setNotificationAlphaHelper();
     }
 
     @Override
@@ -3117,19 +3119,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         float notifBGAlpha = Settings.System.getFloat(cr, Settings.System.NOTIF_BG_ALPHA, 0.0f);
         background.setAlpha((int) ((1-notifBGAlpha) * 255));
 
-
-        float notifAlpha = Settings.System.getFloat(cr, Settings.System.NOTIF_ALPHA, 0.0f);
-        if (mPile != null) {
-          	int N = mNotificationData.size();
-           	for (int i=0; i<N; i++) {
-           		Entry ent = mNotificationData.get(N-i-1);
-           		View expanded = ent.expanded;
-           		if (expanded !=null && expanded.getBackground()!=null) expanded.getBackground().setAlpha((int) ((1-notifAlpha) * 255));
-       	   		View large = ent.getLargeView();
-           		if (large != null && large.getBackground()!=null) large.getBackground().setAlpha((int) ((1-notifAlpha) * 255));
-            }
-        }
-
+        setNotificationAlphaHelper();
+        
         boolean notificationSettingsBtn = Settings.System.getInt(
                     cr, Settings.System.NOTIFICATION_SETTINGS_BUTTON, 0) == 1;
 		if(mSettingsButton!=null)
@@ -3173,5 +3164,21 @@ public class PhoneStatusBar extends BaseStatusBar {
             return true;
 
         return false;
+    }
+
+     private void setNotificationAlphaHelper() {
+        float notifAlpha = Settings.System.getFloat(mContext.getContentResolver(), Settings.System.NOTIF_ALPHA, 0.0f);
+        if (mPile != null) {
+            int N = mNotificationData.size();
+            for (int i=0; i<N; i++) {
+                Entry ent = mNotificationData.get(N-i-1);
+                View expanded = ent.expanded;
+                if (expanded !=null && expanded.getBackground()!=null) 
+                    expanded.getBackground().setAlpha((int) (notifAlpha * 255));
+                View large = ent.getLargeView();
+                if (large != null && large.getBackground()!=null)
+                    large.getBackground().setAlpha((int) (notifAlpha * 255));
+            }
+        }
     }
 }
