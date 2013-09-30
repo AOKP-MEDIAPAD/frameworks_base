@@ -29,7 +29,9 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.graphics.PorterDuff;
 
+import com.android.internal.util.aokp.StatusBarHelpers;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.NetworkController;
 
@@ -308,7 +310,22 @@ public class SignalClusterView
         boolean clustdefault = getResources().getBoolean(R.bool.statusbar_alt_signal_layout);
         showingAltCluster = Settings.System.getBoolean(resolver,
                 Settings.System.STATUSBAR_SIGNAL_CLUSTER_ALT, clustdefault);
+
+
+        int isIconColor = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_ICON_COLOR_ENABLE,0);
+
+        int iconColor = Settings.System.getInt(resolver,
+                Settings.System.STATUSBAR_ICON_COLOR,0);
+      
+        if(isIconColor == 1)
+        {
+            mWifi.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            mMobile.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            mAirplane.setColorFilter(iconColor);
+			mMobileType.setColorFilter(iconColor);
+        }
+
         apply();
     }
 }
-

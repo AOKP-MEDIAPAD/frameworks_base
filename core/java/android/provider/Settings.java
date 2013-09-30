@@ -2565,6 +2565,17 @@ public final class Settings {
         public static final String POINTER_SPEED = "pointer_speed";
 
         /**
+         * Style color of Battery
+        */
+        public static final String STATUSBAR_BATTERY_COLOR = "statusbar_battery_color";
+
+        /**
+         * Style color toggle of Battery
+        */
+        public static final String STATUSBAR_BATTERY_COLOR_TOGGLE = "statusbar_battery_color_toggle";
+
+
+        /**
          * Style of Battery
          * 0 - Icon Only
          * 1 - Text Only
@@ -2616,6 +2627,27 @@ public final class Settings {
          */
         public static final String STATUSBAR_CLOCK_WEEKDAY = "statusbar_clock_weekday";
 
+        /**
+         * This should be an Int representing the Font Size in SP.
+         * @hide
+        */
+        public static final String STATUSBAR_FONT_SIZE = "statusbar_font_size";
+
+
+        /**
+         * Status bar color enable
+         * @hide
+        */
+        public static final String STATUSBAR_ICON_COLOR_ENABLE = "statusbar_icon_color_enable";
+
+        
+        /**
+         * Status bar color filter
+         * @hide
+        */
+        public static final String STATUSBAR_ICON_COLOR = "statusbar_icon_color";
+
+        
         /**
          * Show the pending notification counts as overlays on the statusbar
          * @hide
