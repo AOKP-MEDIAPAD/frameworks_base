@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.graphics.PorterDuff;
 
-import com.android.internal.util.aokp.StatusBarHelpers;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.NetworkController;
 
