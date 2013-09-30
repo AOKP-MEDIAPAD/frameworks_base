@@ -69,6 +69,9 @@ public class SbBatteryController extends LinearLayout {
     private int mLevel = -1;
     private boolean mPlugged = false;
 
+    protected int mBatteryColor;
+	protected int mBatteryColorToggle;
+	 
     public static final int STYLE_ICON_ONLY = 0;
     public static final int STYLE_TEXT_ONLY = 1;
     public static final int STYLE_ICON_TEXT = 2;
@@ -228,7 +231,13 @@ public class SbBatteryController extends LinearLayout {
         ContentResolver cr = mContext.getContentResolver();
         mBatteryStyle = Settings.System.getInt(cr,
                 Settings.System.STATUSBAR_BATTERY_ICON, 0);
-
+        
+		mBatteryColor = Settings.System.getInt(cr,
+                Settings.System.STATUSBAR_BATTERY_COLOR, 0);
+				
+		mBatteryColorToggle = Settings.System.getInt(cr,
+                Settings.System.STATUSBAR_BATTERY_COLOR_TOGGLE, 0);	
+							
         switch (mBatteryStyle) {
             case STYLE_ICON_ONLY:
                 mBatteryCenterText.setVisibility(View.GONE);
@@ -273,6 +282,15 @@ public class SbBatteryController extends LinearLayout {
                 setVisibility(View.VISIBLE);
                 break;
         }
+		
+		if(mBatteryColorToggle == 1 && mBatteryStyle == STYLE_TEXT_ONLY && mBatteryColor!= 0)
+		{
+			mBatteryTextOnly.setTextColor(mBatteryColor);
+			mBatteryTextOnly_Low.setTextColor(mBatteryColor);
+			mBatteryTextOnly_Plugged.setTextColor(mBatteryColor); 
+		}
+		else if(mBatteryColorToggle == 2 && mBatteryStyle == STYLE_TEXT_ONLY && mBatteryColor!= 0)
+			mBatteryTextOnly.setTextColor(mBatteryColor);
 
         setBatteryIcon(mLevel, mPlugged);
 
